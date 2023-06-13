@@ -14,3 +14,4 @@ title: Queries for Microsoft Dataverse
 1. Entities not enabled for Audit
 1. Entity attributes enabled for Audit
 1. Entity attributes not enabled for Audit
+1. Processes and their status
