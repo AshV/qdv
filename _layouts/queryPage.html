@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fuchsia.min.css" />
+    <!--<link rel="stylesheet" href="css/simple-grid.min.css" />-->
+</head>
+<body>
+    <div class="container">
+        <hr />
+        <h1 style="color: var(--pico-primary);">{{ page.title }}</h1>
+        <hr />
+        <input id="btnSend" type="button" value="Select Environment & Click Here To Run Query" style="" />
+        <hr />
+        <div>
+            <!--Environment Selector-->
+            <fieldset role="group">
+                <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
+                <input id="btnAddEnv" type="button" value="Add Environment" />
+            </fieldset>
+        </div>
+    </div>
+</body>
+</html>
