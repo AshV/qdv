@@ -1,4 +1,4 @@
-<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" returntotalrecordcount="true">
   <entity name="systemuser">
     <filter type="and">
       <condition attribute="systemuserid" operator="eq-userid"/>
