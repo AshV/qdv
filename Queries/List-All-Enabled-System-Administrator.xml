@@ -1,0 +1,17 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" returntotalrecordcount="true">
+  <entity name="systemuser">
+    <attribute name="fullname"/>
+    <attribute name="internalemailaddress"/>
+    <order attribute="fullname" descending="true"/>
+    <filter type="and">
+      <condition attribute="isdisabled" operator="eq" value="0"/>
+    </filter>
+    <link-entity name="systemuserroles" from="systemuserid" to="systemuserid" visible="false" intersect="true">
+      <link-entity name="role" from="roleid" to="roleid" alias="ac">
+        <filter type="and">
+          <condition attribute="name" operator="eq" value="System Administrator"/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
