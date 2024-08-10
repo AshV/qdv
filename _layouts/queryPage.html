@@ -21,7 +21,7 @@
         <hr />
         <h1 style="color: var(--pico-primary);">{{page.title}}</h1>
         <hr />
-        <a role="button" id="btnRunQuery" onclick="runQuery()" style="width:100%">Select Environment & Click Here To Run Query</a>
+        <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
         <hr />
         <div>
             <!--Environment Selector-->
@@ -70,10 +70,9 @@
             }
         };
 
-        function runQuery() {
+        function runQueryCheck() {
             if (!isValidURL(orgURL.value) || orgURL.value === null) {
                 alert("Please enter a valid organization URL then retry.");
-                break;
             }
         };
 
