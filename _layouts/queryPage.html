@@ -21,7 +21,7 @@
         <hr />
         <h1 style="color: var(--pico-primary);">{{page.title}}</h1>
         <hr />
-        <input id="btnRunQuery" onclick="runQuery()" type="button" value="Select Environment & Click Here To Run Query" style="" />
+        <a role="button" id="btnRunQuery" onclick="runQuery()" style="width:100%">Select Environment & Click Here To Run Query</a>
         <hr />
         <div>
             <!--Environment Selector-->
@@ -72,7 +72,7 @@
             if (!isValidURL(orgURL.value) || orgURL.value === null)
                 alert("Please enter a valid organization URL then retry.");
             else {
-                let pluralName = "{{page.tablePlural}}"; 
+                let pluralName = "{{page.tablePlural}}";
                 let uri = `/api/data/v9.2/${pluralName}?fetchXml=${query}`;
                 window.open(orgURL.value + uri, '_blank');
             }
