@@ -1,0 +1,16 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" returntotalrecordcount="true">
+  <entity name="team">
+    <attribute name="name"/>
+    <order attribute="name" descending="false"/>
+    <filter type="and">
+      <condition attribute="teamtype" operator="ne" value="1"/>
+    </filter>
+    <link-entity name="teamroles" from="teamid" to="teamid" visible="false" intersect="true">
+      <link-entity name="role" from="roleid" to="roleid" alias="ae">
+        <filter type="and">
+          <condition attribute="name" operator="eq" value="System Administrator"/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
