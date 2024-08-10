@@ -1,0 +1,19 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" returntotalrecordcount="true">
+  <entity name="team">
+    <order attribute="name" descending="false"/>
+    <link-entity name="teamroles" from="teamid" to="teamid" visible="false" intersect="true">
+      <link-entity name="role" from="roleid" to="roleid" alias="ag">
+        <filter type="and">
+          <condition attribute="name" operator="eq" value="System Administrator"/>
+        </filter>
+      </link-entity>
+    </link-entity>
+    <link-entity name="teammembership" from="teamid" to="teamid" visible="false" intersect="true">
+      <link-entity name="systemuser" from="systemuserid" to="systemuserid" alias="ah">
+        <attribute name="systemuserid" alias="UserId"/>
+        <attribute name="fullname" alias="FullName"/>
+        <order attribute="fullname" descending="false"/>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
