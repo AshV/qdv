@@ -33,7 +33,7 @@
             </fieldset>
         </div>
     </div>
-    <a id="buildQuery">#</a>
+    <a target="_blank" id="buildQuery" href="https://github.com/AshV/QueryDataverse">|</a>
     <script>
         let orgURLs = {};
         let addURL = document.querySelector("#btnAddEnv");
@@ -75,7 +75,7 @@
                 alert("Please enter a valid organization URL then retry.");
             else {
                 buildQuery.href = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
-                window.location = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
+                buildQuery.click();
             }
         };
 
