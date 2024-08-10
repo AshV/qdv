@@ -33,11 +33,12 @@
             </fieldset>
         </div>
     </div>
+    <a id="buildQuery()">#</a>
     <script>
         let orgURLs = {};
         let addURL = document.querySelector("#btnAddEnv");
         let orgURL = document.querySelector("#txtEnv");
-        let runQuery = document.querySelector("#btnRunQuery");
+        let buildQuery = document.querySelector("#buildQuery");
         let apiVersion = "/api/data/v9.2/";
 
         if (localStorage.getItem("lsOrgURLs") !== null) {
@@ -51,7 +52,6 @@
             if (isValidURL(orgURL.value)) {
                 var url = new URL(orgURL.value);
                 orgURL.value = url.origin;
-                runQuery.href = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
             } else {
                 alert("Please enter a valid URL.");
             }
@@ -71,8 +71,11 @@
         };
 
         function runQueryCheck() {
-            if (!isValidURL(orgURL.value) || orgURL.value === null) {
+            if (!isValidURL(orgURL.value) || orgURL.value === null)
                 alert("Please enter a valid organization URL then retry.");
+            else {
+                buildQuery.href = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
+                buildQuery.click();
             }
         };
 
