@@ -1,0 +1,13 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+  <entity name="systemuser">
+    <filter type="and">
+      <condition attribute="systemuserid" operator="eq-userid"/>
+    </filter>
+    <link-entity name="teammembership" from="systemuserid" to="systemuserid" visible="false" intersect="true">
+      <link-entity name="team" from="teamid" to="teamid">
+        <attribute name="name" alias="MyTeam"/>
+        <order attribute="name" descending="false"/>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
