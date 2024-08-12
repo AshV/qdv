@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{page.title}}</title>
+    <title>{{page.title}} | Query Dataverse</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.cyan.min.css" />
     <script>
@@ -12,28 +12,90 @@
             .catch(error => { alert("Unexpected Error Occured!"); });
 
         async function GetQuery() {
-            const response = await fetch("https://raw.githubusercontent.com/AshV/QueryDataverse/main/Queries/{{page.queryName}}");
+            const response = await fetch("https://raw.githubusercontent.com/AshV/QueryDataverse/main/Queries/{{page.queryName}}/fetch.xml");
             return await response.text();
         }
     </script>
+    <style>
+        [role="tabs"] {
+            display: flex;
+        }
+
+            [role="tabs"] section {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+            }
+
+            [role="tabs"] figure {
+                flex-grow: 1;
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
+
+            [role="tabs"] [type="radio"]:checked + figure {
+                display: block;
+            }
+
+        nav[role="tab-control"] label.active {
+            color: var(--primary);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <hr />
-        <h1 style="color: var(--pico-primary);">{{page.title}}</h1>
-        <hr />
-        <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
-        <hr />
-        <div>
-            <!--Environment Selector-->
-            <div id="envList">
+    <main>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li>
+                        <h1 style="color: var(--pico-primary);"><a href="https://www.ashishvishwakarma.com/Query-Dataverse">Query Dataverse</a></h1>
+                    </li>
+                </ul>
+                <ul>
+                    <li><a href="https://github.com/AshV/Query-Dataverse">Github</a></li>
+                </ul>
+            </nav>
+            <h1 style="color: var(--pico-primary);">{{page.title}}</h1>
+            <hr />
+            <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
+            <hr />
+            <div>
+                <!--Environment Selector-->
+                <div id="envList">
+                </div>
+                <fieldset role="group">
+                    <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
+                    <input id="btnAddEnv" type="button" value="Add Environment" />
+                </fieldset>
             </div>
-            <fieldset role="group">
-                <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
-                <input id="btnAddEnv" type="button" value="Add Environment" />
-            </fieldset>
+            <!--Code Tabs-->
+            <nav role="tab-control">
+                <ul>
+                    <li><label for="tabFetchXML">FetchXML</label></li>
+                    <li><label for="tabWebAPI">WebAPI</label></li>
+                    <li><label for="tabSQL">SQL</label></li>
+                </ul>
+            </nav>
+            <div role="tabs">
+                <section>
+                    <input hidden="hidden" type="radio" name="tabs" id="tabFetchXML" checked="checked" />
+                    <figure>
+                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                    </figure>
+                    <input hidden="hidden" type="radio" name="tabs" id="tabWebAPI" />
+                    <figure>
+                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/web.api&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                    </figure>
+                    <input hidden="hidden" type="radio" name="tabs" id="tabSQL" />
+                    <figure>
+                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                    </figure>
+                </section>
+            </div>
         </div>
-    </div>
+    </main>
     <a target="_blank" id="buildQuery" href="https://github.com/AshV/QueryDataverse">|</a>
     <script>
         let orgURLs = {};
@@ -104,6 +166,24 @@
             }
             document.querySelector("#envList").innerHTML = orgs;
         };
+
+        // Tab Highlighter
+        const nodeList = document.querySelectorAll('nav[role="tab-control"] label');
+        const eventListenerCallback = setActiveState.bind(null, nodeList);
+
+        nodeList[0].classList.add('active'); /** add active class to first node  */
+
+        nodeList.forEach((node) => {
+            node.addEventListener("click", eventListenerCallback); /** add click event listener to all nodes */
+        });
+
+        /** the click handler */
+        function setActiveState(nodeList, event) {
+            nodeList.forEach((node) => {
+                node.classList.remove("active"); /** remove active class from all nodes */
+            });
+            event.target.classList.add("active"); /* set active class on current node */
+        }
     </script>
 </body>
 </html>
