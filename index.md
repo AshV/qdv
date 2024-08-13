@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Query Dataverse
-subTitle: Frequently used dataverse queries collection with a handy way to execute
-baseUrl: https://www.ashishvishwakarma.com/Query-Dataverse/
+subTitle: A collection of frequently used Microsoft Dataverse queries with a convenient way of executing them.
+baseUrl: https://www.ashishvishwakarma.com/qdv/
 ---
 
 > {{page.subTitle}}
