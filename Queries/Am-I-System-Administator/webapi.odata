@@ -1,0 +1,4 @@
+GET [Organization URI]/systemusers
+    ?$expand=systemuserroles_association($select=name;$filter=(name eq 'System+Administrator'))
+    &$filter=(Microsoft.Dynamics.CRM.EqualUserId(PropertyName='systemuserid')) 
+         and (systemuserroles_association/any(o1:(o1/name eq 'System+Administrator')))

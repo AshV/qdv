@@ -1,0 +1,5 @@
+GET [Organization URI]/systemusers
+    ?$select=fullname,internalemailaddress
+    &$expand=systemuserroles_association($filter=(name eq 'System+Administrator'))
+    &$filter=(isdisabled eq false) and (systemuserroles_association/any(o1:(o1/name eq 'System+Administrator')))
+    &$orderby=fullname desc

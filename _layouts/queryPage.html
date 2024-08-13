@@ -45,58 +45,61 @@
     </style>
 </head>
 <body>
-    <main>
-        <div class="container">
-            <nav>
-                <ul>
-                    <li>
-                        <h1 style="color: var(--pico-primary);"><a href="https://www.ashishvishwakarma.com/Query-Dataverse">Query Dataverse</a></h1>
-                    </li>
-                </ul>
-                <ul>
-                    <li><a href="https://github.com/AshV/Query-Dataverse">Github</a></li>
-                </ul>
-            </nav>
-            <h1 style="color: var(--pico-primary);">{{page.title}}</h1>
-            <hr />
-            <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
-            <hr />
-            <div>
-                <!--Environment Selector-->
-                <div id="envList">
-                </div>
-                <fieldset role="group">
-                    <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
-                    <input id="btnAddEnv" type="button" value="Add Environment" />
-                </fieldset>
+    <div class="container">
+        <nav>
+            <ul>
+                <li>
+                    <h1 style="color: var(--pico-primary);"><a href="https://www.ashishvishwakarma.com/qdv">Query Dataverse</a></h1>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="https://github.com/AshV/qdv">Github</a></li>
+            </ul>
+        </nav>
+        <h2>{{page.title}}</h2>
+        <hr />
+        <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
+        <hr />
+        <div>
+            <!--Environment Selector-->
+            <div id="envList">
             </div>
-            <!--Code Tabs-->
-            <nav role="tab-control">
-                <ul>
-                    <li><label for="tabFetchXML">FetchXML</label></li>
-                    <li><label for="tabWebAPI">WebAPI</label></li>
-                    <li><label for="tabSQL">SQL</label></li>
-                </ul>
-            </nav>
-            <div role="tabs">
-                <section>
-                    <input hidden="hidden" type="radio" name="tabs" id="tabFetchXML" checked="checked" />
-                    <figure>
-                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                    </figure>
-                    <input hidden="hidden" type="radio" name="tabs" id="tabWebAPI" />
-                    <figure>
-                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/web.api&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                    </figure>
-                    <input hidden="hidden" type="radio" name="tabs" id="tabSQL" />
-                    <figure>
-                        <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                    </figure>
-                </section>
-            </div>
+            <fieldset role="group">
+                <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
+                <input id="btnAddEnv" type="button" value="Add Environment" />
+            </fieldset>
         </div>
-    </main>
-    <a target="_blank" id="buildQuery" href="https://github.com/AshV/QueryDataverse">|</a>
+        <hr />
+        <p>To improve this query, please join disussion <a href="https://github.com/AshV/qdv/discussions/{{page.discussionId}}">here</a>. Feel free to suggest any new queries to be added <a href="https://github.com/AshV/Query-Dataverse/discussions/categories/ideas">here</a>, or log issue <a href="https://github.com/AshV/Query-Dataverse/issues/new">here</a> if facing any.</p>
+        <!--Code Tabs-->
+        <nav role="tab-control">
+            <ul>
+                <li><label for="tabFetchXML">FetchXML</label></li>
+                <li><label for="tabWebAPI">WebAPI</label></li>
+                <li><label for="tabSQL">SQL</label></li>
+            </ul>
+        </nav>
+        <div role="tabs">
+            <section>
+                <input hidden="hidden" type="radio" name="tabs" id="tabFetchXML" checked="checked" />
+                <figure>
+                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                </figure>
+                <input hidden="hidden" type="radio" name="tabs" id="tabWebAPI" />
+                <figure>
+                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/webapi.odata&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                </figure>
+                <input hidden="hidden" type="radio" name="tabs" id="tabSQL" />
+                <figure>
+                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+                </figure>
+            </section>
+        </div>
+        <p style="text-align:center">
+            Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/">AshV</a>
+            <a target="_blank" id="buildQuery" href="https://github.com/AshV/QueryDataverse"> .</a>
+        </p>
+    </div>
     <script>
         let orgURLs = {};
         let addURL = document.querySelector("#btnAddEnv");
@@ -171,7 +174,7 @@
         const nodeList = document.querySelectorAll('nav[role="tab-control"] label');
         const eventListenerCallback = setActiveState.bind(null, nodeList);
 
-        nodeList[0].classList.add('active'); /** add active class to first node  */
+        nodeList[0].classList.add('outline'); /** add active class to first node  */
 
         nodeList.forEach((node) => {
             node.addEventListener("click", eventListenerCallback); /** add click event listener to all nodes */
@@ -180,9 +183,9 @@
         /** the click handler */
         function setActiveState(nodeList, event) {
             nodeList.forEach((node) => {
-                node.classList.remove("active"); /** remove active class from all nodes */
+                node.classList.remove("outline"); /** remove active class from all nodes */
             });
-            event.target.classList.add("active"); /* set active class on current node */
+            event.target.classList.add("outline"); /* set active class on current node */
         }
     </script>
 </body>
