@@ -1,0 +1,1 @@
+/teams?$select=name&$expand=teamroles_association($filter=(name eq 'System+Administrator')),teammembership_association($select=systemuserid,fullname)&$filter=(teamroles_association/any(o1:(o1/name eq 'System+Administrator'))) and (teammembership_association/any(o2:(o2/systemuserid ne null)))&$orderby=name asc
