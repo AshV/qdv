@@ -4,6 +4,8 @@ const QDV = {
     envListContainer: null,
 
     init: function () {
+        this.initTheme(); // Initialize theme first
+
         this.orgURLInput = document.querySelector("#txtEnv");
         this.envListContainer = document.querySelector("#envList");
 
@@ -84,11 +86,35 @@ const QDV = {
         let orgsHTML = '';
         for (let [key, value] of Object.entries(this.orgURLs)) {
             orgsHTML += `<div class="env-tag" onclick="QDV.setCurrentEnvironment(this);" value="${value}" title="${value}">
-                            ${key} 
+                            ${key}
                             <span class="remove" onclick="event.stopPropagation(); QDV.removeEnvironment('${key}')">×</span>
                          </div>`;
         }
         this.envListContainer.innerHTML = orgsHTML;
+    },
+
+    // Theme Logic
+    initTheme: function () {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        this.updateThemeIcon(savedTheme);
+    },
+
+    toggleTheme: function () {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        this.updateThemeIcon(newTheme);
+    },
+
+    updateThemeIcon: function (theme) {
+        const btn = document.getElementById('themeToggleBtn');
+        if (btn) {
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            btn.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        }
     },
 
     runQuery: async function (queryName, tablePlural) {

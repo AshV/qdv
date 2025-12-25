@@ -1,12 +1,9 @@
 :root {
   /* Purple & Modern Palette */
   --primary-color: #a80dcbd6;
-  /* Deep Purple */
   --primary-hover: #a30dc1d6;
   --secondary-color: #b388ff;
-  /* Lavender */
   --accent-color: #00e5ff;
-  /* Cyan Accent for highlights */
   --background-color: #f3f4f6;
   --text-color: #1f2937;
   --text-muted: #6b7280;
@@ -16,6 +13,21 @@
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --border-radius: 12px;
+}
+
+[data-theme="dark"] {
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --card-bg: #1e1e1e;
+  --header-bg: rgba(30, 30, 30, 0.9);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+  /* Adjusted for Dark Mode */
+  --primary-color: #ce58e8d6;
+  /* Brighter purple for dark bg */
+  --secondary-color: #d1c4e9;
 }
 
 body {
