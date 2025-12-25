@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
     <title>{{page.title}} | Query Dataverse</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.cyan.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}" />
+
     <script>
         var query = "";
 
@@ -17,96 +30,81 @@
             return await response.text();
         }
     </script>
-    <style>
-        [role="tabs"] {
-            display: flex;
-        }
-
-            [role="tabs"] section {
-                display: flex;
-                flex-wrap: wrap;
-                width: 100%;
-            }
-
-            [role="tabs"] figure {
-                flex-grow: 1;
-                width: 100%;
-                height: 100%;
-                display: none;
-            }
-
-            [role="tabs"] [type="radio"]:checked + figure {
-                display: block;
-            }
-
-        nav[role="tab-control"] label.active {
-            color: var(--primary);
-            cursor: pointer;
-        }
-    </style>
 </head>
+
 <body>
+    <nav class="custom-navbar">
+        <div class="brand">
+            <a href="{{ '/' | relative_url }}">Query Dataverse</a>
+        </div>
+        <ul>
+            <li><a href="https://github.com/AshV/qdv" class="nav-link" target="_blank">Github</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
-        <nav>
-            <ul>
-                <li>
-                    <h1 style="color: var(--pico-primary);"><a href="https://www.ashishvishwakarma.com/qdv">Query Dataverse</a></h1>
-                </li>
-            </ul>
-            <ul>
-                <li><a href="https://github.com/AshV/qdv">Github</a></li>
-            </ul>
-        </nav>
-        <h2>{{page.title}}</h2>
-        <hr />
-        <a role="button" id="btnRunQuery" onclick="runQueryCheck()" style="width:100%">Select Environment & Click Here To Run Query</a>
-        <hr />
-        <div>
-            <!--Environment Selector-->
-            <div id="envList">
+        <h1>{{page.title}}</h1>
+        <hr style="opacity: 0.1; margin: 2rem 0;">
+
+        <div class="env-selector-card">
+            <h3>Environment Selector</h3>
+            <p>Select Environment & Click Here To Run Query</p>
+
+            <div class="env-input-group">
+                <input id="txtEnv" type="url" placeholder="https://org.crm8.dynamics.com" autofocus />
+                <input id="btnAddEnv" type="button" class="btn-primary" value="Add Environment" />
             </div>
-            <fieldset role="group">
-                <input id="txtEnv" type="url" style="font-size:large" placeholder="https://org.crm8.dynamics.com" autofocus />
-                <input id="btnAddEnv" type="button" value="Add Environment" />
-            </fieldset>
+
+            <div id="envList" class="env-tags">
+                <!-- Tags will be injected here -->
+            </div>
+
+            <div style="margin-top: 1rem; text-align: right;">
+                <a role="button" id="btnRunQuery" class="btn-primary" onclick="runQueryCheck()"
+                    style="text-decoration: none; display: inline-block;">Run Query</a>
+            </div>
         </div>
-        <hr />
-        <p>To improve this query, please join disussion <a href="https://github.com/AshV/qdv/discussions/{{page.discussionId}}">here</a>. Feel free to suggest any new queries to be added <a href="https://github.com/AshV/Query-Dataverse/discussions/categories/ideas">here</a>, or log issue <a href="https://github.com/AshV/Query-Dataverse/issues/new">here</a> if facing any.</p>
+
+        <p>To improve this query, please join disussion <a
+                href="https://github.com/AshV/qdv/discussions/{{page.discussionId}}">here</a>.</p>
+
         <!--Code Tabs-->
-        <nav role="tab-control">
-            <ul>
-                <li><label for="tabFetchXML">FetchXML</label></li>
-                <li><label for="tabWebAPI">WebAPI</label></li>
-                <li><label for="tabSQL">SQL</label></li>
-            </ul>
-        </nav>
-        <div role="tabs">
-            <section>
-                <input hidden="hidden" type="radio" name="tabs" id="tabFetchXML" checked="checked" />
-                <figure>
-                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                </figure>
-                <input hidden="hidden" type="radio" name="tabs" id="tabWebAPI" />
-                <figure>
-                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/webapi.odata&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                </figure>
-                <input hidden="hidden" type="radio" name="tabs" id="tabSQL" />
-                <figure>
-                    <iframe frameborder="0" scrolling="no" style="width:100%; height:352px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-                </figure>
-            </section>
+        <div class="custom-tabs">
+            <div class="tab-headers">
+                <div class="tab-header active" data-target="tabFetchXML">FetchXML</div>
+                <div class="tab-header" data-target="tabWebAPI">WebAPI</div>
+                <div class="tab-header" data-target="tabSQL">SQL</div>
+            </div>
+
+            <div id="tabFetchXML" class="tab-content active">
+                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
+                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+            </div>
+            <div id="tabWebAPI" class="tab-content">
+                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
+                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/webapi.odata&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+            </div>
+            <div id="tabSQL" class="tab-content">
+                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
+                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+            </div>
         </div>
-        <p style="text-align:center">
-            <a target="_blank" id="buildQuery" href="https://github.com/AshV/qdv">🕉️</a>
-            Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/">AshV</a>
-        </p>
+
+        <footer>
+            <p style="text-align:center">
+                <a target="_blank" id="buildQuery" href="https://github.com/AshV/qdv"
+                    style="font-size: 2rem; text-decoration: none;">🕉️</a><br>
+                Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/">AshV</a>
+            </p>
+        </footer>
     </div>
+
     <script>
         let orgURLs = {};
         let addURL = document.querySelector("#btnAddEnv");
         let orgURL = document.querySelector("#txtEnv");
         let buildQuery = document.querySelector("#buildQuery");
-        let apiVersion = "/api/data/v9.2/";
+        // Removed apiVersion unused var
 
         if (localStorage.getItem("lsOrgURLs") !== null) {
             orgURLs = JSON.parse(localStorage.getItem("lsOrgURLs"));
@@ -132,14 +130,19 @@
                 orgURLs[orgName] = url.origin;
                 localStorage.setItem("lsOrgURLs", JSON.stringify(orgURLs));
                 renderOrgList(orgName);
+                orgURL.value = ""; // Clear input
             } else {
                 alert("Please enter a valid URL.");
             }
         };
 
         function runQueryCheck() {
-            if (!isValidURL(orgURL.value) || orgURL.value === null)
-                alert("Please enter a valid organization URL then retry.");
+            if (!isValidURL(orgURL.value) || orgURL.value === null) {
+                // Try to pick selected? The logic here is a bit weird in original.
+                // It relies on orgURL input having a value.
+                // If the user clicked a tag, onChangeEnv sets the input.
+                alert("Please select or enter a valid organization URL.");
+            }
             else {
                 buildQuery.href = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
                 buildQuery.click();
@@ -152,42 +155,47 @@
         };
 
         function onChangeEnv(env) {
-            orgURL.value = env.value;
-            document.querySelectorAll("button").forEach(elem => elem.classList.add("outline"));
-            env.classList.remove("outline");
+            orgURL.value = env.getAttribute('value'); // Use getAttribute for safety
+            document.querySelectorAll(".env-tag").forEach(elem => elem.style.border = "none");
+            // Highlight logic
+            env.style.border = "2px solid var(--primary-color)";
         };
 
-        function removeEnv(env) {
-            delete orgURLs[env.parentElement.id];
+        function removeEnv(event, key) {
+            event.stopPropagation();
+            delete orgURLs[key];
             localStorage.setItem("lsOrgURLs", JSON.stringify(orgURLs));
-            env.parentElement.remove();
+            renderOrgList();
         };
 
-        function renderOrgList(selectedOrg) {
-            let orgs = '';
+        function renderOrgList() {
+            let orgsHTML = '';
             for (let [key, value] of Object.entries(orgURLs)) {
-                orgs = orgs + `<button class="outline" onclick="onChangeEnv(this);" id="${key}" value="${value}" title="${value}">${key}<span style="padding-left: 5px;" onclick="removeEnv(this);" title="Remove environment from list">✘</span></button>`;
+                orgsHTML += `<div class="env-tag" onclick="onChangeEnv(this);" value="${value}" title="${value}">
+                                ${key} 
+                                <span class="remove" onclick="removeEnv(event, '${key}')">×</span>
+                             </div>`;
             }
-            document.querySelector("#envList").innerHTML = orgs;
+            document.querySelector("#envList").innerHTML = orgsHTML;
         };
 
-        // Tab Highlighter
-        const nodeList = document.querySelectorAll('nav[role="tab-control"] label');
-        const eventListenerCallback = setActiveState.bind(null, nodeList);
+        // Improved Tab Logic
+        const tabHeaders = document.querySelectorAll('.tab-header');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-        nodeList[0].classList.add('outline'); /** add active class to first node  */
+        tabHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                // Remove active class from all
+                tabHeaders.forEach(h => h.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
 
-        nodeList.forEach((node) => {
-            node.addEventListener("click", eventListenerCallback); /** add click event listener to all nodes */
-        });
-
-        /** the click handler */
-        function setActiveState(nodeList, event) {
-            nodeList.forEach((node) => {
-                node.classList.remove("outline"); /** remove active class from all nodes */
+                // Add to current
+                header.classList.add('active');
+                const targetId = header.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
             });
-            event.target.classList.add("outline"); /* set active class on current node */
-        }
+        });
     </script>
 </body>
+
 </html>

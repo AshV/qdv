@@ -1,0 +1,192 @@
+:root {
+  --primary-color: #00bcd4;
+  --secondary-color: #0097a7;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --header-bg: rgba(30, 30, 30, 0.95);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: #f8f9fa;
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar */
+nav.custom-navbar {
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: var(--glass-border);
+}
+
+nav.custom-navbar .brand a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+nav.custom-navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav.custom-navbar a.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav.custom-navbar a.nav-link:hover {
+  color: var(--primary-color);
+}
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif; /* Or keep Inter if preferred */
+  color: #222;
+}
+
+/* Environment Selector Card */
+.env-selector-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.env-input-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.env-input-group input {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Tags */
+.env-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.env-tag {
+  background: #e0f7fa;
+  color: #006064;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.env-tag .remove {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Tabs */
+.custom-tabs {
+  margin-top: 2rem;
+}
+
+.tab-headers {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 1rem;
+}
+
+.tab-header {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-header:hover {
+  color: var(--primary-color);
+}
+
+.tab-header.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+  display: none;
+  background: #1e1e1e; /* Dark theme for code */
+  border-radius: 8px;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+iframe.code-frame {
+  width: 100%;
+  height: 400px;
+  border: none;
+  background: transparent;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  border-top: 1px solid #eee;
+  margin-top: 4rem;
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.mt-4 { margin-top: 1.5rem; }
