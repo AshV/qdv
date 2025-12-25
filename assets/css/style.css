@@ -1,8 +1,8 @@
 :root {
   /* Purple & Modern Palette */
-  --primary-color: #6200ea;
+  --primary-color: #a80dcbd6;
   /* Deep Purple */
-  --primary-hover: #7c4dff;
+  --primary-hover: #a30dc1d6;
   --secondary-color: #b388ff;
   /* Lavender */
   --accent-color: #00e5ff;
@@ -206,6 +206,8 @@ h3 {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+  align-items: start;
+  /* Fit to content height */
 }
 
 .query-card {
@@ -218,7 +220,7 @@ h3 {
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.2s;
-  height: 100%;
+  /* height: 100%; removed to fit content */
 }
 
 .query-card:hover {
