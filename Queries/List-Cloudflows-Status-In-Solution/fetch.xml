@@ -1,0 +1,20 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false" returntotalrecordcount="true">
+  <entity name="workflow">
+    <attribute name="workflowid"/>
+    <attribute name="name"/>
+    <attribute name="category"/>
+    <attribute name="statecode"/>
+    <attribute name="statuscode"/>
+    <filter type="and">
+      <condition attribute="category" operator="eq" value="5"/>
+    </filter>
+    <link-entity name="solutioncomponent" from="objectid" to="workflowid" alias="sc" link-type="inner">
+      <link-entity name="solution" from="solutionid" to="solutionid" alias="sol" link-type="inner">
+        <attribute name="uniquename"/>
+        <filter type="and">
+          <condition attribute="uniquename" operator="eq" value="Default"/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
