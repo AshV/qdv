@@ -63,8 +63,11 @@ nav.custom-navbar a.nav-link:hover {
   padding: 0 2rem;
 }
 
-h1, h2, h3 {
-  font-family: 'Playfair Display', serif; /* Or keep Inter if preferred */
+h1,
+h2,
+h3 {
+  font-family: 'Playfair Display', serif;
+  /* Or keep Inter if preferred */
   color: #222;
 }
 
@@ -161,7 +164,8 @@ h1, h2, h3 {
 
 .tab-content {
   display: none;
-  background: #1e1e1e; /* Dark theme for code */
+  background: #1e1e1e;
+  /* Dark theme for code */
   border-radius: 8px;
   padding: 1rem;
   overflow: hidden;
@@ -188,5 +192,52 @@ footer {
 }
 
 /* Utilities */
-.text-center { text-align: center; }
-.mt-4 { margin-top: 1.5rem; }
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Code Blocks */
+.code-container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.code-container pre {
+  margin: 0;
+  border-radius: 8px;
+}
+
+.code-container code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border-radius: 8px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  opacity: 0;
+  /* Hidden by default */
+}
+
+.code-container:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
