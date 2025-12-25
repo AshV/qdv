@@ -200,15 +200,25 @@ h3 {
   opacity: 1;
 }
 
-/* Grid Layout for Index */
+/* Masonry Layout for Index */
 .query-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  column-count: 3;
+  column-gap: 1.5rem;
   margin-top: 2rem;
-  align-items: start;
-  /* Fit to content height */
 }
+
+@media (max-width: 1024px) {
+  .query-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .query-grid {
+    column-count: 1;
+  }
+}
+
 
 .query-card {
   background: var(--card-bg);
@@ -220,6 +230,10 @@ h3 {
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.2s;
+  break-inside: avoid;
+  /* Prevent split across columns */
+  margin-bottom: 1.5rem;
+  /* Vertical spacing for masonry */
   /* height: 100%; removed to fit content */
 }
 
