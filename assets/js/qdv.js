@@ -146,6 +146,77 @@ const QDV = {
             this.render();
         },
 
+        cleanUrl: function (raw) {
+            if (!raw || typeof raw !== 'string') return '';
+            let val = raw.trim().replace(/^["'<(\[]+|[>"')\]]+$/g, '').trim();
+            if (!val) return '';
+
+            const hasProtocol = /^https?:\/\//i.test(val);
+            const hasDomainPattern = /[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/i.test(val) || /^localhost(:\d+)?/i.test(val);
+
+            if (!hasProtocol && !hasDomainPattern) {
+                return val;
+            }
+
+            if (!hasProtocol) {
+                val = 'https://' + val;
+            }
+
+            try {
+                const url = new URL(val);
+                if (url.hostname && (url.hostname.includes('.') || url.hostname === 'localhost')) {
+                    return url.origin;
+                }
+            } catch (e) {
+                const match = val.match(/^(https?:\/\/[^\/?#]+)/i);
+                if (match) return match[1];
+            }
+
+            return val.replace(/[?#].*$/, '').replace(/\/+$/, '');
+        },
+
+        bindPasteCleaner: function (input) {
+            if (!input) return;
+
+            // Immediately sanitize pasted URL on 'paste' event
+            input.addEventListener('paste', (e) => {
+                const clipboardData = e.clipboardData || window.clipboardData;
+                const pastedText = clipboardData ? clipboardData.getData('text') : '';
+                if (pastedText) {
+                    const cleaned = this.cleanUrl(pastedText);
+                    if (cleaned) {
+                        e.preventDefault();
+                        input.value = cleaned;
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+
+                        input.classList.add('url-auto-cleaned');
+                        setTimeout(() => input.classList.remove('url-auto-cleaned'), 600);
+                    }
+                }
+            });
+
+            // Also clean on input if pasted via mobile context menu or dragged
+            input.addEventListener('input', () => {
+                const cur = input.value;
+                if (cur && (cur.includes('?') || cur.includes('#') || cur.includes('/main.aspx') || cur.includes('/api/'))) {
+                    const cleaned = this.cleanUrl(cur);
+                    if (cleaned && cleaned !== cur) {
+                        input.value = cleaned;
+                    }
+                }
+            });
+
+            // Clean on blur or change
+            input.addEventListener('change', () => {
+                if (input.value && input.value.trim()) {
+                    const cleaned = this.cleanUrl(input.value);
+                    if (cleaned && cleaned !== input.value.trim()) {
+                        input.value = cleaned;
+                    }
+                }
+            });
+        },
+
         setupListeners: function () {
             // Homepage Add Button
             const addBtn = document.getElementById('btnAddEnv');
@@ -171,6 +242,10 @@ const QDV = {
                     }
                 });
             }
+
+            // Bind instant paste cleaner to environment inputs
+            this.bindPasteCleaner(envInput);
+            this.bindPasteCleaner(modalEnvInput);
 
             // Header Environment Indicator opens modal everywhere
             const navIndicator = document.getElementById('navEnvIndicator');
@@ -209,31 +284,23 @@ const QDV = {
 
         isValidURL: function (str) {
             if (!str || typeof str !== 'string') return false;
-            let val = str.trim();
-            if (!val.startsWith('http://') && !val.startsWith('https://')) {
-                val = 'https://' + val;
-            }
+            const cleaned = this.cleanUrl(str);
             try {
-                const url = new URL(val);
-                return url.hostname.length > 3 && url.hostname.includes('.');
+                const url = new URL(cleaned);
+                return url.hostname.length > 3 && (url.hostname.includes('.') || url.hostname === 'localhost');
             } catch (e) {
                 return false;
             }
         },
 
         formatURL: function (raw) {
-            let val = raw.trim();
-            if (!val.startsWith('http://') && !val.startsWith('https://')) {
-                val = 'https://' + val;
-            }
-            const url = new URL(val);
-            return url.origin;
+            return this.cleanUrl(raw);
         },
 
         handleAdd: function (inputElement) {
             if (!inputElement) return;
 
-            const val = inputElement.value.trim();
+            const val = this.cleanUrl(inputElement.value);
             if (!this.isValidURL(val)) {
                 QDV.toast.show('Please enter a valid URL (e.g., https://org.crm.dynamics.com)', 'error');
                 inputElement.focus();
