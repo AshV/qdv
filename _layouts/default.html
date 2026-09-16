@@ -1,56 +1,92 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
     <meta charset="utf-8">
-    <title>{{page.title }} | {{page.subTitle}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A curated collection of Microsoft Dataverse queries across FetchXML, Web API OData, and TDS SQL with instant browser execution.">
+    <meta name="site-baseurl" content="{{ '' | relative_url }}">
 
-    <!-- Fonts -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%236366f1%22/><text y=%22.75em%22 x=%2250%25%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>Q</text></svg>">
+
+    <title>{% if page.title %}{{ page.title }} | {% endif %}Query Dataverse</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Highlight.js Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}" />
-
-    <!-- Highlight.js -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 
 <body>
     <nav class="custom-navbar">
-        <div class="brand">
-            <a href="{{ '/' | relative_url }}">Query Dataverse</a>
-        </div>
-        <ul>
-            <li>
-                <button id="themeToggleBtn" onclick="QDV.toggleTheme()"
-                    style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0.5rem;"
-                    title="Toggle Theme">
-                    🌙
+        <div class="nav-inner">
+            <div class="brand-wrapper">
+                <a href="{{ '/' | relative_url }}" class="brand-logo" aria-label="Query Dataverse Home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                </a>
+                <a href="{{ '/' | relative_url }}" class="brand-text">
+                    <span class="brand-title">Query Dataverse</span>
+                    <span class="brand-badge">Hub</span>
+                </a>
+            </div>
+
+            <!-- Active Environment Header Indicator -->
+            <div id="navEnvIndicator" class="nav-env-indicator" title="Select or change active Dataverse environment">
+                <span class="status-dot"></span>
+                <span class="env-label">Set Environment</span>
+            </div>
+
+            <!-- Right Navbar Actions -->
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="btn-icon" onclick="QDV.theme.toggle()" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
                 </button>
-            </li>
-            <li><a href="https://github.com/AshV/qdv" class="nav-link" target="_blank">Github</a></li>
-        </ul>
+                <a href="https://github.com/AshV/qdv" class="nav-github-link" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
     </nav>
 
-    <div class="container">
+    <main class="container">
         {{ content }}
-    </div>
+    </main>
 
-    <footer>
-        <p>Feel free to suggest any new queries to be added <a
-                href="https://github.com/AshV/Query-Dataverse/discussions/categories/ideas">here</a>, or log issue <a
-                href="https://github.com/AshV/Query-Dataverse/issues/new">here</a> if facing any.</p>
-        <p>Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/" target="_blank">AshV</a></p>
+    <footer class="custom-footer">
+        <div class="footer-inner">
+            <div class="footer-brand-text">
+                <span>Query Dataverse · Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/" target="_blank" rel="noopener noreferrer">AshV</a></span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/AshV/qdv/discussions" target="_blank" rel="noopener noreferrer">Discussions & Ideas</a>
+                <a href="https://github.com/AshV/qdv/issues/new" target="_blank" rel="noopener noreferrer">Report Issue</a>
+                <a href="https://github.com/AshV/qdv" target="_blank" rel="noopener noreferrer">Source Code</a>
+            </div>
+        </div>
     </footer>
+
+    <!-- Highlight.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/http.min.js"></script>
+
+    <!-- App Logic -->
     <script src="{{ '/assets/js/qdv.js' | relative_url }}"></script>
 </body>
 

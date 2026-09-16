@@ -1,7 +1,10 @@
 ---
 layout: queryPage
-title: List Cloudflows Status In Solution
+title: List Cloud Flows Status in Solutions
+description: Query the state, status reason, and activation of Power Automate Cloud Flows in solutions.
+category: Solutions & Flows
 tablePlural: workflows 
 queryName: List-Cloudflows-Status-In-Solution
 discussionId: 11
+tags: [cloudflows, powerautomate, workflows, solutions]
 ---

@@ -1,7 +1,10 @@
 ---
 layout: queryPage
-title: List All Teams Assigned To Me
+title: Teams Assigned to Current User
+description: List all Microsoft Dataverse teams and business units to which the current user belongs.
+category: Teams & Groups
 tablePlural: systemusers 
 queryName: My-Teams
 discussionId: 9
+tags: [teams, me, user, membership]
 ---

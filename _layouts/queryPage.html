@@ -1,201 +1,183 @@
-<!DOCTYPE html>
-<html>
+---
+layout: default
+---
 
-<head>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
-    <title>{{page.title}} | Query Dataverse</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
-        rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}" />
-
-    <script>
-        var query = "";
-
-        GetQuery()
-            .then(response => { query = response; })
-            .catch(error => { alert("Unexpected Error Occured!"); });
-
-        async function GetQuery() {
-            const response = await fetch("https://raw.githubusercontent.com/AshV/QueryDataverse/main/Queries/{{page.queryName}}/fetch.xml");
-            return await response.text();
-        }
-    </script>
-</head>
-
-<body>
-    <nav class="custom-navbar">
-        <div class="brand">
-            <a href="{{ '/' | relative_url }}">Query Dataverse</a>
-        </div>
-        <ul>
-            <li><a href="https://github.com/AshV/qdv" class="nav-link" target="_blank">Github</a></li>
-        </ul>
+<div class="query-detail-wrapper">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Queries</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>{{ page.category | default: "Dataverse" }}</span>
+        <span class="breadcrumb-separator">/</span>
+        <span style="color: var(--text-main); font-weight: 600;">{{ page.title }}</span>
     </nav>
 
-    <div class="container">
-        <h1>{{page.title}}</h1>
-        <hr style="opacity: 0.1; margin: 2rem 0;">
-
-        <div class="env-selector-card">
-            <h3>Environment Selector</h3>
-            <p>Select Environment & Click Here To Run Query</p>
-
-            <div class="env-input-group">
-                <input id="txtEnv" type="url" placeholder="https://org.crm8.dynamics.com" autofocus />
-                <input id="btnAddEnv" type="button" class="btn-primary" value="Add Environment" />
+    <!-- Query Header -->
+    <header class="query-detail-header">
+        <div class="detail-header-top">
+            <div class="detail-title-group">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span class="entity-badge {{ page.tablePlural }}">{{ page.tablePlural }}</span>
+                    {% if page.category %}
+                    <span class="format-tag">{{ page.category }}</span>
+                    {% endif %}
+                </div>
+                <h1>{{ page.title }}</h1>
+                <p>{{ page.description | default: "Execute or inspect this Microsoft Dataverse query across FetchXML, Web API OData, and TDS SQL formats." }}</p>
             </div>
 
-            <div id="envList" class="env-tags">
-                <!-- Tags will be injected here -->
-            </div>
-
-            <div style="margin-top: 1rem; text-align: right;">
-                <a role="button" id="btnRunQuery" class="btn-primary" onclick="runQueryCheck()"
-                    style="text-decoration: none; display: inline-block;">Run Query</a>
-            </div>
-        </div>
-
-        <p>To improve this query, please join disussion <a
-                href="https://github.com/AshV/qdv/discussions/{{page.discussionId}}">here</a>.</p>
-
-        <!--Code Tabs-->
-        <div class="custom-tabs">
-            <div class="tab-headers">
-                <div class="tab-header active" data-target="tabFetchXML">FetchXML</div>
-                <div class="tab-header" data-target="tabWebAPI">WebAPI</div>
-                <div class="tab-header" data-target="tabSQL">SQL</div>
-            </div>
-
-            <div id="tabFetchXML" class="tab-content active">
-                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
-                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/fetch.xml&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-            </div>
-            <div id="tabWebAPI" class="tab-content">
-                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
-                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/webapi.odata&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
-            </div>
-            <div id="tabSQL" class="tab-content">
-                <iframe frameborder="0" scrolling="no" class="code-frame" allow="clipboard-write"
-                    src="https://emgithub.com/iframe.html?target=https://github.com/AshV/Query-Dataverse/blob/main/Queries/{{page.queryName}}/tds.sql&style=github-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on&fetchFromJsDelivr=on"></iframe>
+            <div class="detail-header-actions">
+                <button class="btn-primary" onclick="QDV.runQuery('{{ page.queryName }}', '{{ page.tablePlural }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Run Query</span>
+                </button>
+                {% if page.discussionId %}
+                <a href="https://github.com/AshV/qdv/discussions/{{ page.discussionId }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Discussion #{{ page.discussionId }}</span>
+                </a>
+                {% endif %}
             </div>
         </div>
 
-        <footer>
-            <p style="text-align:center">
-                <a target="_blank" id="buildQuery" href="https://github.com/AshV/qdv"
-                    style="font-size: 2rem; text-decoration: none;">🕉️</a><br>
-                Built with ❤️ by <a href="https://www.linkedin.com/in/ashishvishwakarma-ashv/">AshV</a>
-            </p>
-        </footer>
+        <div class="detail-meta-strip">
+            <div id="envActiveIndicatorBox" class="env-active-indicator-box">
+                <span class="status-dot"></span>
+                <span>Active Environment: Checking...</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>Runs securely in your browser session against Microsoft Dataverse Web API</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Code Viewer Card -->
+    <div class="code-viewer-card">
+        <!-- Tabs Header -->
+        <div class="code-tabs-nav">
+            <button class="code-tab-btn active" data-target="paneFetchXML" data-filename="fetch.xml">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span>FetchXML</span>
+            </button>
+            <button class="code-tab-btn" data-target="paneWebAPI" data-filename="webapi.odata">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span>Web API (OData)</span>
+            </button>
+            <button class="code-tab-btn" data-target="paneSQL" data-filename="tds.sql">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+                <span>TDS / SQL</span>
+            </button>
+        </div>
+
+        <!-- Code Container & Toolbar -->
+        <div class="code-pane-container">
+            <div class="code-toolbar">
+                <div class="code-toolbar-left">
+                    <span class="code-file-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        <span id="codeFileBadge">fetch.xml</span>
+                    </span>
+                </div>
+
+                <div class="code-toolbar-right">
+                    <button id="btnCopyActiveCode" class="btn-code-action" title="Copy code snippet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span>Copy Code</span>
+                    </button>
+                    <button id="btnDownloadActiveCode" class="btn-code-action" title="Download query file">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Download</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Panes -->
+            <div id="paneFetchXML" class="code-pane-content active">
+                <pre><code id="codeFetchXML" class="language-xml">Loading FetchXML...</code></pre>
+            </div>
+            <div id="paneWebAPI" class="code-pane-content">
+                <pre><code id="codeWebAPI" class="language-http">Loading Web API OData...</code></pre>
+            </div>
+            <div id="paneSQL" class="code-pane-content">
+                <pre><code id="codeSQL" class="language-sql">Loading TDS SQL...</code></pre>
+            </div>
+        </div>
     </div>
 
-    <script>
-        let orgURLs = {};
-        let addURL = document.querySelector("#btnAddEnv");
-        let orgURL = document.querySelector("#txtEnv");
-        let buildQuery = document.querySelector("#buildQuery");
-        // Removed apiVersion unused var
+    <!-- Execution Guide -->
+    <section class="execution-guide-section">
+        <h3>How to Execute this Query</h3>
+        <div class="guide-cards-grid">
+            <div class="guide-card">
+                <div class="guide-card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                </div>
+                <h4>1. Browser Web API</h4>
+                <p>Click <strong>Run Query</strong> above. QDV encodes the FetchXML and queries your organization's Web API endpoint in a new tab using your browser's existing Dataverse session.</p>
+            </div>
 
-        if (localStorage.getItem("lsOrgURLs") !== null) {
-            orgURLs = JSON.parse(localStorage.getItem("lsOrgURLs"));
-            renderOrgList();
-        }
+            <div class="guide-card">
+                <div class="guide-card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <h4>2. XrmToolBox / FetchXML Builder</h4>
+                <p>Copy the <strong>FetchXML</strong> snippet and open <em>FetchXML Builder</em> in XrmToolBox. Paste the query directly to inspect records, preview results, or generate C# / JavaScript code.</p>
+            </div>
 
-        orgURL.onchange = function () {
-            if (orgURL.value.length === 0)
-                return;
-            if (isValidURL(orgURL.value)) {
-                var url = new URL(orgURL.value);
-                orgURL.value = url.origin;
-            } else {
-                alert("Please enter a valid URL.");
-            }
-        };
+            <div class="guide-card">
+                <div class="guide-card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                </div>
+                <h4>3. SSMS / TDS Endpoint</h4>
+                <p>Copy the <strong>TDS / SQL</strong> query. In SQL Server Management Studio, connect to <code>[org].crm.dynamics.com,5558</code> with Azure AD authentication and execute standard SQL queries.</p>
+            </div>
+        </div>
+    </section>
+</div>
 
-        addURL.onclick = function () {
-            if (isValidURL(orgURL.value)) {
-                let url = new URL(orgURL.value);
-                orgURL.value = url.origin;
-                let orgName = url.hostname.split('.')[0];
-                orgURLs[orgName] = url.origin;
-                localStorage.setItem("lsOrgURLs", JSON.stringify(orgURLs));
-                renderOrgList(orgName);
-                orgURL.value = ""; // Clear input
-            } else {
-                alert("Please enter a valid URL.");
-            }
-        };
-
-        function runQueryCheck() {
-            if (!isValidURL(orgURL.value) || orgURL.value === null) {
-                // Try to pick selected? The logic here is a bit weird in original.
-                // It relies on orgURL input having a value.
-                // If the user clicked a tag, onChangeEnv sets the input.
-                alert("Please select or enter a valid organization URL.");
-            }
-            else {
-                buildQuery.href = `${orgURL.value}/api/data/v9.2/{{page.tablePlural}}?fetchXml=${query}`;
-                buildQuery.click();
-            }
-        };
-
-        function isValidURL(str) {
-            regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-            return regexp.test(str) ? true : false;
-        };
-
-        function onChangeEnv(env) {
-            orgURL.value = env.getAttribute('value'); // Use getAttribute for safety
-            document.querySelectorAll(".env-tag").forEach(elem => elem.style.border = "none");
-            // Highlight logic
-            env.style.border = "2px solid var(--primary-color)";
-        };
-
-        function removeEnv(event, key) {
-            event.stopPropagation();
-            delete orgURLs[key];
-            localStorage.setItem("lsOrgURLs", JSON.stringify(orgURLs));
-            renderOrgList();
-        };
-
-        function renderOrgList() {
-            let orgsHTML = '';
-            for (let [key, value] of Object.entries(orgURLs)) {
-                orgsHTML += `<div class="env-tag" onclick="onChangeEnv(this);" value="${value}" title="${value}">
-                                ${key} 
-                                <span class="remove" onclick="removeEnv(event, '${key}')">×</span>
-                             </div>`;
-            }
-            document.querySelector("#envList").innerHTML = orgsHTML;
-        };
-
-        // Improved Tab Logic
-        const tabHeaders = document.querySelectorAll('.tab-header');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                // Remove active class from all
-                tabHeaders.forEach(h => h.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-
-                // Add to current
-                header.classList.add('active');
-                const targetId = header.getAttribute('data-target');
-                document.getElementById(targetId).classList.add('active');
-            });
-        });
-    </script>
-</body>
-
-</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        QDV.detail.init('{{ page.queryName }}', '{{ page.tablePlural }}');
+    });
+</script>

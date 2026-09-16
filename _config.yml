@@ -1,0 +1,14 @@
+title: Query Dataverse
+description: A collection of frequently used Microsoft Dataverse queries with convenient browser execution, FetchXML, Web API OData, and TDS SQL definitions.
+url: "https://www.ashishvishwakarma.com"
+baseurl: "/qdv"
+
+markdown: kramdown
+highlighter: rouge
+
+include:
+  - Queries
+
+exclude:
+  - server.bat
+  - README.md
