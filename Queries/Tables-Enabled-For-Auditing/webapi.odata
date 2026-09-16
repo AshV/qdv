@@ -1,0 +1,4 @@
+GET [Organization URI]/api/data/v9.2/EntityDefinitions
+    ?$select=LogicalName,DisplayName,IsAuditEnabled
+    &$filter=IsAuditEnabled/Value eq true
+    &$orderby=LogicalName asc

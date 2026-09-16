@@ -1,0 +1,15 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="asyncoperation">
+    <attribute name="name" />
+    <attribute name="operationtype" />
+    <attribute name="statuscode" />
+    <attribute name="message" />
+    <attribute name="startedon" />
+    <attribute name="completedon" />
+    <filter type="and">
+      <condition attribute="statuscode" operator="eq" value="31" />
+      <condition attribute="completedon" operator="last-x-days" value="7" />
+    </filter>
+    <order attribute="completedon" descending="true" />
+  </entity>
+</fetch>

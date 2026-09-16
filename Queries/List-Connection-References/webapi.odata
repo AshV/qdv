@@ -1,0 +1,3 @@
+GET [Organization URI]/api/data/v9.2/connectionreferences
+    ?$select=connectionreferencelogicalname,connectionreferencedisplayname,connectorid,statuscode,statecode
+    &$orderby=connectionreferencedisplayname asc

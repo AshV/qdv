@@ -1,0 +1,10 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="connectionreference">
+    <attribute name="connectionreferencelogicalname" />
+    <attribute name="connectionreferencedisplayname" />
+    <attribute name="connectorid" />
+    <attribute name="statuscode" />
+    <attribute name="statecode" />
+    <order attribute="connectionreferencedisplayname" descending="false" />
+  </entity>
+</fetch>

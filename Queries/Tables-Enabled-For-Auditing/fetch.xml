@@ -1,0 +1,9 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+  <entity name="audit">
+    <attribute name="objecttypecode" />
+    <attribute name="action" />
+    <attribute name="operation" />
+    <attribute name="createdon" />
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>

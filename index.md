@@ -62,11 +62,14 @@ subTitle: A curated collection of Microsoft Dataverse queries
             <button class="category-pill" data-category="Teams & Groups">
                 <span>Teams & Groups</span>
             </button>
-            <button class="category-pill" data-category="Solutions & Flows">
-                <span>Solutions & Flows</span>
+            <button class="category-pill" data-category="Solutions & ALM">
+                <span>Solutions & ALM</span>
+            </button>
+            <button class="category-pill" data-category="Monitoring & Governance">
+                <span>Monitoring & Governance</span>
             </button>
         </div>
-        <span id="filteredCount" class="filter-results-count">Showing 9 queries</span>
+        <span id="filteredCount" class="filter-results-count">Showing 19 queries</span>
     </div>
 </div>
 

@@ -1,0 +1,5 @@
+GET [Organization URI]/api/data/v9.2/systemusers
+    ?$select=fullname,applicationid,domainname,isdisabled
+    &$filter=applicationid ne null
+    &$expand=systemuserroles_association($select=name)
+    &$orderby=fullname asc

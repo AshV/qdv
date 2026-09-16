@@ -1,0 +1,13 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="environmentvariabledefinition">
+    <attribute name="schemaname" />
+    <attribute name="displayname" />
+    <attribute name="type" />
+    <attribute name="defaultvalue" />
+    <attribute name="description" />
+    <link-entity name="environmentvariablevalue" from="environmentvariabledefinitionid" to="environmentvariabledefinitionid" link-type="outer" alias="val">
+      <attribute name="value" alias="currentvalue" />
+    </link-entity>
+    <order attribute="schemaname" descending="false" />
+  </entity>
+</fetch>

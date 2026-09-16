@@ -1,0 +1,4 @@
+GET [Organization URI]/api/data/v9.2/systemusers
+    ?$select=fullname,domainname,internalemailaddress,createdon
+    &$filter=isdisabled eq false and accessmode ne 4 and not systemuserroles_association/any()
+    &$orderby=fullname asc

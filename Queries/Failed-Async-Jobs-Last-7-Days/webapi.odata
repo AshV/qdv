@@ -1,0 +1,4 @@
+GET [Organization URI]/api/data/v9.2/asyncoperations
+    ?$select=name,operationtype,statuscode,message,startedon,completedon
+    &$filter=statuscode eq 31 and Microsoft.Dynamics.CRM.LastXDays(PropertyName='completedon',PropertyValue=7)
+    &$orderby=completedon desc

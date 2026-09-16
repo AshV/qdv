@@ -1,0 +1,18 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="solution">
+    <attribute name="uniquename" />
+    <attribute name="friendlyname" />
+    <attribute name="version" />
+    <attribute name="ismanaged" />
+    <attribute name="installedon" />
+    <attribute name="description" />
+    <filter type="and">
+      <condition attribute="isvisible" operator="eq" value="1" />
+    </filter>
+    <link-entity name="publisher" from="publisherid" to="publisherid" link-type="inner" alias="pub">
+      <attribute name="friendlyname" alias="publishername" />
+      <attribute name="customizationprefix" alias="prefix" />
+    </link-entity>
+    <order attribute="installedon" descending="true" />
+  </entity>
+</fetch>

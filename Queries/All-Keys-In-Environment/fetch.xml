@@ -1,0 +1,8 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="entitykey">
+    <attribute name="logicalname" />
+    <attribute name="componentstate" />
+    <attribute name="entitykeyindexstatus" />
+    <order attribute="logicalname" descending="false" />
+  </entity>
+</fetch>

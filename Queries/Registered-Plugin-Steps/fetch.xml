@@ -1,0 +1,17 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+  <entity name="sdkmessageprocessingstep">
+    <attribute name="name" />
+    <attribute name="stage" />
+    <attribute name="mode" />
+    <attribute name="rank" />
+    <attribute name="statecode" />
+    <attribute name="filteringattributes" />
+    <link-entity name="sdkmessagefilter" from="sdkmessagefilterid" to="sdkmessagefilterid" link-type="inner" alias="filter">
+      <attribute name="primaryobjecttypecode" alias="primaryentity" />
+    </link-entity>
+    <link-entity name="sdkmessage" from="sdkmessageid" to="sdkmessageid" link-type="inner" alias="msg">
+      <attribute name="name" alias="message" />
+    </link-entity>
+    <order attribute="name" descending="false" />
+  </entity>
+</fetch>

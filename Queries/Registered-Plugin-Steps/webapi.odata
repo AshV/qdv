@@ -1,0 +1,4 @@
+GET [Organization URI]/api/data/v9.2/sdkmessageprocessingsteps
+    ?$select=name,stage,mode,rank,statecode,filteringattributes
+    &$expand=sdkmessagefilterid($select=primaryobjecttypecode),sdkmessageid($select=name)
+    &$orderby=name asc
