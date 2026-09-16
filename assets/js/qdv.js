@@ -361,17 +361,7 @@ const QDV = {
         render: function () {
             const keys = Object.keys(QDV.orgURLs);
 
-            // 1. Render in Homepage Studio (#envList)
-            const homeContainer = document.getElementById('envList');
-            const countBadge = document.getElementById('envCountBadge');
-            if (countBadge) {
-                countBadge.textContent = `${keys.length} saved`;
-            }
-            if (homeContainer) {
-                homeContainer.innerHTML = this.renderPillsHTML(keys);
-            }
-
-            // 2. Render in Global Modal (#modalEnvList)
+            // 1. Render in Global Modal (#modalEnvList)
             const modalContainer = document.getElementById('modalEnvList');
             const modalCount = document.getElementById('modalEnvCount');
             if (modalCount) {
@@ -381,11 +371,11 @@ const QDV = {
                 modalContainer.innerHTML = this.renderPillsHTML(keys);
             }
 
-            // 3. Render in Detail Page Strip (#detailEnvList)
-            const detailContainer = document.getElementById('detailEnvList');
-            if (detailContainer) {
-                detailContainer.innerHTML = this.renderDetailPillsHTML(keys);
-            }
+            // 2. Render in all compact pill rows on Homepage & Query Detail Page (.detail-env-pills-row)
+            const pillRows = document.querySelectorAll('.detail-env-pills-row');
+            pillRows.forEach(row => {
+                row.innerHTML = this.renderDetailPillsHTML(keys);
+            });
 
             // 4. Update Active Indicator Boxes (Home + Detail Page)
             const activeBoxes = document.querySelectorAll('#envActiveIndicatorBox');

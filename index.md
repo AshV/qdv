@@ -4,82 +4,39 @@ title: Home
 subTitle: A curated collection of Microsoft Dataverse queries
 ---
 
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="hero-badge">
-        <span class="chip-dot"></span>
-        <span>Microsoft Dataverse Query Studio</span>
-    </div>
+<!-- Compact Hero Section -->
+<section class="hero-section compact-hero">
     <h1 class="hero-title">
         Execute & Inspect <span class="gradient-text">Dataverse Queries</span>
     </h1>
     <p class="hero-subtitle">
-        A curated catalog of frequently used queries with instant browser execution, FetchXML, Web API OData, and TDS SQL definitions.
+        A curated catalog of frequently used Microsoft Dataverse queries with instant browser execution across FetchXML, Web API OData, and TDS SQL.
     </p>
-    <div class="hero-stats">
-        <div class="stat-chip">
-            <span class="chip-dot" style="background: var(--primary);"></span>
-            <span>9 Ready Queries</span>
-        </div>
-        <div class="stat-chip">
-            <span class="chip-dot" style="background: var(--accent-cyan);"></span>
-            <span>FetchXML · OData · TDS SQL</span>
-        </div>
-        <div class="stat-chip">
-            <span class="chip-dot" style="background: var(--accent-emerald);"></span>
-            <span>Direct Browser SSO</span>
-        </div>
-    </div>
 </section>
 
-<!-- Environment Studio Card -->
-<section class="env-studio-card">
-    <div class="env-header">
-        <div class="env-header-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                <line x1="6" y1="18" x2="6.01" y2="18"></line>
-            </svg>
-            <h3>Environment Context</h3>
-            <span id="envCountBadge" class="env-count-badge">0 saved</span>
-        </div>
+<!-- Compact Environment Context Strip -->
+<div class="detail-env-manager-strip" style="margin-bottom: 1.5rem; margin-top: 0;">
+    <div class="detail-env-status-side">
+        <span class="detail-env-label">Environment:</span>
         <div id="envActiveIndicatorBox" class="env-active-indicator-box">
             <span class="status-dot"></span>
             <span>No active environment</span>
         </div>
     </div>
 
-    <div class="env-input-wrapper">
-        <div class="input-with-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            <input id="txtEnv" type="url" placeholder="https://org.crm.dynamics.com" autocomplete="off" spellcheck="false" />
+    <div class="detail-env-pills-side">
+        <div class="detail-env-pills-row">
+            <!-- Injected dynamically by qdv.js -->
         </div>
-        <button id="btnAddEnv" class="btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            <span>Add Environment</span>
+            <span>Add / Manage</span>
         </button>
     </div>
-
-    <div id="envList" class="env-tags-list">
-        <!-- Injected dynamically by qdv.js -->
-    </div>
-
-    <p class="env-tip-text">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
-        <span>Queries run directly in your browser using your existing authenticated Microsoft Dataverse session.</span>
-    </p>
-</section>
+</div>
 
 <!-- Filter & Search Studio -->
 <div class="filter-studio">

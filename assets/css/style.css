@@ -360,6 +360,25 @@ nav.custom-navbar {
   line-height: 1.6;
 }
 
+/* Compact Hero for Homepage */
+.hero-section.compact-hero {
+  text-align: left;
+  padding: 1.25rem 0 0.75rem;
+}
+
+.hero-section.compact-hero .hero-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.35rem);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.03em;
+}
+
+.hero-section.compact-hero .hero-subtitle {
+  font-size: 0.95rem;
+  max-width: 800px;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
 .hero-stats {
   display: flex;
   justify-content: center;
