@@ -44,18 +44,27 @@ layout: default
             </div>
         </div>
 
-        <div class="detail-meta-strip">
-            <div id="envActiveIndicatorBox" class="env-active-indicator-box">
-                <span class="status-dot"></span>
-                <span>Active Environment: Checking...</span>
+        <!-- Detail Page Interactive Environment Manager Bar -->
+        <div class="detail-env-manager-strip">
+            <div class="detail-env-status-side">
+                <span class="detail-env-label">Environment:</span>
+                <div id="envActiveIndicatorBox" class="env-active-indicator-box">
+                    <span class="status-dot"></span>
+                    <span>No active environment</span>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                <span>Runs securely in your browser session against Microsoft Dataverse Web API</span>
+
+            <div class="detail-env-pills-side">
+                <div id="detailEnvList" class="detail-env-pills-row">
+                    <!-- Environment pills injected by qdv.js -->
+                </div>
+                <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Add / Manage</span>
+                </button>
             </div>
         </div>
     </header>
@@ -126,7 +135,7 @@ layout: default
                 <pre><code id="codeFetchXML" class="language-xml">Loading FetchXML...</code></pre>
             </div>
             <div id="paneWebAPI" class="code-pane-content">
-                <pre><code id="codeWebAPI" class="language-http">Loading Web API OData...</code></pre>
+                <pre><code id="codeWebAPI" class="language-odata">Loading Web API OData...</code></pre>
             </div>
             <div id="paneSQL" class="code-pane-content">
                 <pre><code id="codeSQL" class="language-sql">Loading TDS SQL...</code></pre>
@@ -172,6 +181,117 @@ layout: default
                 <h4>3. SSMS / TDS Endpoint</h4>
                 <p>Copy the <strong>TDS / SQL</strong> query. In SQL Server Management Studio, connect to <code>[org].crm.dynamics.com,5558</code> with Azure AD authentication and execute standard SQL queries.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Suggested Queries Section -->
+    <section class="suggested-queries-section">
+        <div class="suggested-header">
+            <div>
+                <h3>Suggested Queries</h3>
+                <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Other frequently used Microsoft Dataverse queries</p>
+            </div>
+            <a href="{{ '/' | relative_url }}" class="btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem;">
+                View All Queries →
+            </a>
+        </div>
+
+        <div class="query-grid" style="margin-top: 1.5rem;">
+            {% assign current_url = page.url %}
+            {% assign current_category = page.category %}
+            {% assign current_table = page.tablePlural %}
+            {% assign shown_urls = "" | split: "" %}
+            {% assign shown_count = 0 %}
+
+            <!-- Priority 1: Queries matching current category or target entity -->
+            {% for other in site.pages %}
+                {% if other.layout == 'queryPage' and other.url != current_url %}
+                    {% if other.category == current_category or other.tablePlural == current_table %}
+                        {% if shown_count < 3 %}
+                            {% assign shown_urls = shown_urls | push: other.url %}
+                            {% assign shown_count = shown_count | plus: 1 %}
+                            <div class="query-card"
+                                 data-title="{{ other.title | escape }}"
+                                 data-desc="{{ other.description | default: '' | escape }}"
+                                 data-category="{{ other.category | default: 'General' }}"
+                                 data-entity="{{ other.tablePlural }}"
+                                 data-tags="{{ other.tags | join: ' ' }}">
+                                <div class="card-top-row">
+                                    <span class="entity-badge {{ other.tablePlural }}">{{ other.tablePlural }}</span>
+                                    <div class="format-tags">
+                                        <span class="format-tag">XML</span>
+                                        <span class="format-tag">OData</span>
+                                        <span class="format-tag">SQL</span>
+                                    </div>
+                                </div>
+                                <h3 class="query-card-title">
+                                    <a href="{{ other.url | relative_url }}">{{ other.title }}</a>
+                                </h3>
+                                <p class="query-card-desc">
+                                    {{ other.description | default: "Click Run to execute against your active Dataverse environment or explore query definitions." }}
+                                </p>
+                                <div class="query-actions-bar">
+                                    <button class="btn-primary btn-card-run" onclick="QDV.runQuery('{{ other.queryName }}', '{{ other.tablePlural }}')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                        </svg>
+                                        <span>Run</span>
+                                    </button>
+                                    <a href="{{ other.url | relative_url }}" class="btn-secondary btn-card-open">
+                                        <span>Details</span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <!-- Priority 2: Fallback to any remaining query if fewer than 3 shown -->
+            {% if shown_count < 3 %}
+                {% for other in site.pages %}
+                    {% if other.layout == 'queryPage' and other.url != current_url %}
+                        {% unless shown_urls contains other.url %}
+                            {% if shown_count < 3 %}
+                                {% assign shown_urls = shown_urls | push: other.url %}
+                                {% assign shown_count = shown_count | plus: 1 %}
+                                <div class="query-card"
+                                     data-title="{{ other.title | escape }}"
+                                     data-desc="{{ other.description | default: '' | escape }}"
+                                     data-category="{{ other.category | default: 'General' }}"
+                                     data-entity="{{ other.tablePlural }}"
+                                     data-tags="{{ other.tags | join: ' ' }}">
+                                    <div class="card-top-row">
+                                        <span class="entity-badge {{ other.tablePlural }}">{{ other.tablePlural }}</span>
+                                        <div class="format-tags">
+                                            <span class="format-tag">XML</span>
+                                            <span class="format-tag">OData</span>
+                                            <span class="format-tag">SQL</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="query-card-title">
+                                        <a href="{{ other.url | relative_url }}">{{ other.title }}</a>
+                                    </h3>
+                                    <p class="query-card-desc">
+                                        {{ other.description | default: "Click Run to execute against your active Dataverse environment or explore query definitions." }}
+                                    </p>
+                                    <div class="query-actions-bar">
+                                        <button class="btn-primary btn-card-run" onclick="QDV.runQuery('{{ other.queryName }}', '{{ other.tablePlural }}')">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                            </svg>
+                                            <span>Run</span>
+                                        </button>
+                                        <a href="{{ other.url | relative_url }}" class="btn-secondary btn-card-open">
+                                            <span>Details</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endunless %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     </section>
 </div>

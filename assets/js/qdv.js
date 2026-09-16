@@ -12,6 +12,7 @@ const QDV = {
 
     init: function () {
         this.detectBasePath();
+        this.registerODataLanguage();
         this.theme.init();
         this.env.init();
         this.search.init();
@@ -19,12 +20,10 @@ const QDV = {
     },
 
     detectBasePath: function () {
-        // Detect base path from meta or script tag, or default to current path context
         const metaBase = document.querySelector('meta[name="site-baseurl"]');
         if (metaBase && metaBase.content) {
             this.basePath = metaBase.content.replace(/\/$/, '');
         } else {
-            // Check if on github pages /qdv/
             const pathname = window.location.pathname;
             if (pathname.startsWith('/qdv/')) {
                 this.basePath = '/qdv';
@@ -32,6 +31,56 @@ const QDV = {
                 this.basePath = '';
             }
         }
+    },
+
+    // =========================================================================
+    // Custom OData Syntax Highlighting Grammar for Highlight.js
+    // =========================================================================
+    registerODataLanguage: function () {
+        if (!window.hljs) return;
+
+        hljs.registerLanguage('odata', function (hljs) {
+            return {
+                name: 'OData',
+                case_insensitive: true,
+                keywords: {
+                    keyword: 'GET POST PATCH PUT DELETE and or not eq ne gt ge lt le in has any all asc desc',
+                    literal: 'true false null',
+                    built_in: '$select $filter $expand $top $skip $orderby $count $search $apply $format'
+                },
+                contains: [
+                    {
+                        className: 'string',
+                        begin: /'/,
+                        end: /'/,
+                        contains: [{ begin: /''/ }]
+                    },
+                    {
+                        className: 'variable',
+                        begin: /\[/,
+                        end: /\]/
+                    },
+                    {
+                        className: 'title.function',
+                        begin: /[a-zA-Z0-9_.]+(?=\()/
+                    },
+                    {
+                        className: 'number',
+                        begin: /\b\d+(\.\d+)?\b/
+                    },
+                    {
+                        className: 'symbol',
+                        begin: /[$&?]/
+                    },
+                    {
+                        className: 'params',
+                        begin: /\b[a-zA-Z_][a-zA-Z0-9_]*(?==)/
+                    },
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE
+                ]
+            };
+        });
     },
 
     // =========================================================================
@@ -84,7 +133,6 @@ const QDV = {
                 if (storedActive && QDV.orgURLs[storedActive]) {
                     QDV.activeOrg = storedActive;
                 } else {
-                    // Default to first available org if any
                     const keys = Object.keys(QDV.orgURLs);
                     if (keys.length > 0) {
                         QDV.activeOrg = keys[0];
@@ -99,34 +147,63 @@ const QDV = {
         },
 
         setupListeners: function () {
+            // Homepage Add Button
             const addBtn = document.getElementById('btnAddEnv');
             const envInput = document.getElementById('txtEnv');
 
             if (addBtn && envInput) {
-                addBtn.onclick = () => this.handleAdd();
+                addBtn.onclick = () => this.handleAdd(envInput);
                 envInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
-                        this.handleAdd();
+                        this.handleAdd(envInput);
                     }
                 });
             }
 
+            // Modal Add Button
+            const modalAddBtn = document.getElementById('btnModalAddEnv');
+            const modalEnvInput = document.getElementById('txtModalEnv');
+            if (modalAddBtn && modalEnvInput) {
+                modalAddBtn.onclick = () => this.handleModalAdd();
+                modalEnvInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.handleModalAdd();
+                    }
+                });
+            }
+
+            // Header Environment Indicator opens modal everywhere
             const navIndicator = document.getElementById('navEnvIndicator');
             if (navIndicator) {
                 navIndicator.onclick = () => {
-                    const studio = document.querySelector('.env-studio-card');
-                    if (studio) {
-                        studio.scrollIntoView({ behavior: 'smooth' });
-                        const input = document.getElementById('txtEnv');
-                        if (input) input.focus();
-                    } else {
-                        // On query page, scroll to env selector if present
-                        const envSelector = document.getElementById('detailEnvCard');
-                        if (envSelector) {
-                            envSelector.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    }
+                    this.openModal();
                 };
+            }
+
+            // Keyboard Escape closes modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.closeModal();
+                }
+            });
+        },
+
+        openModal: function () {
+            const modal = document.getElementById('envModal');
+            if (modal) {
+                modal.classList.add('open');
+                const input = document.getElementById('txtModalEnv');
+                if (input) {
+                    setTimeout(() => input.focus(), 50);
+                }
+                this.render();
+            }
+        },
+
+        closeModal: function () {
+            const modal = document.getElementById('envModal');
+            if (modal) {
+                modal.classList.remove('open');
             }
         },
 
@@ -153,14 +230,13 @@ const QDV = {
             return url.origin;
         },
 
-        handleAdd: function () {
-            const input = document.getElementById('txtEnv');
-            if (!input) return;
+        handleAdd: function (inputElement) {
+            if (!inputElement) return;
 
-            const val = input.value.trim();
+            const val = inputElement.value.trim();
             if (!this.isValidURL(val)) {
                 QDV.toast.show('Please enter a valid URL (e.g., https://org.crm.dynamics.com)', 'error');
-                input.focus();
+                inputElement.focus();
                 return;
             }
 
@@ -178,11 +254,17 @@ const QDV = {
                 this.save();
                 this.render();
 
-                input.value = '';
-                QDV.toast.show(`Environment "${orgName}" added and selected!`, 'success');
+                inputElement.value = '';
+                QDV.toast.show(`Environment "${orgName}" added and activated!`, 'success');
             } catch (e) {
                 QDV.toast.show('Error parsing environment URL.', 'error');
             }
+        },
+
+        handleModalAdd: function () {
+            const input = document.getElementById('txtModalEnv');
+            if (!input) return;
+            this.handleAdd(input);
         },
 
         select: function (key) {
@@ -190,7 +272,7 @@ const QDV = {
                 QDV.activeOrg = key;
                 this.save();
                 this.render();
-                QDV.toast.show(`Active environment switched to ${key}`, 'info');
+                QDV.toast.show(`Switched to "${key}"`, 'info');
             }
         },
 
@@ -228,56 +310,96 @@ const QDV = {
             }
         },
 
-        render: function () {
-            // Render environment tags list on home or detail page
-            const container = document.getElementById('envList');
-            const countBadge = document.getElementById('envCountBadge');
-            const activeStatusBox = document.getElementById('envActiveIndicatorBox');
+        renderPillsHTML: function (keys) {
+            if (keys.length === 0) {
+                return `<span style="color: var(--text-subtle); font-size: 0.85rem; padding: 0.25rem 0;">No environments added yet.</span>`;
+            }
 
+            let html = '';
+            keys.forEach(key => {
+                const url = QDV.orgURLs[key];
+                const isSelected = key === QDV.activeOrg;
+                html += `
+                    <div class="env-pill ${isSelected ? 'selected' : ''}" 
+                         onclick="QDV.env.select('${key}')" 
+                         title="${url}">
+                        <span class="env-pill-status"></span>
+                        <span class="env-pill-name">${key}</span>
+                        <span class="env-pill-action" onclick="QDV.env.copyUrl('${key}', event)" title="Copy URL">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </span>
+                        <span class="env-pill-action" onclick="QDV.env.remove('${key}', event)" title="Remove environment">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </span>
+                    </div>
+                `;
+            });
+            return html;
+        },
+
+        renderDetailPillsHTML: function (keys) {
+            if (keys.length === 0) {
+                return `<span style="color: var(--text-subtle); font-size: 0.8rem;">No saved environments</span>`;
+            }
+
+            let html = '';
+            keys.forEach(key => {
+                const url = QDV.orgURLs[key];
+                const isSelected = key === QDV.activeOrg;
+                html += `
+                    <div class="env-pill ${isSelected ? 'selected' : ''}" 
+                         onclick="QDV.env.select('${key}')" 
+                         title="${url}" style="padding: 0.25rem 0.65rem; font-size: 0.8rem;">
+                        <span class="env-pill-status"></span>
+                        <span class="env-pill-name">${key}</span>
+                    </div>
+                `;
+            });
+            return html;
+        },
+
+        render: function () {
             const keys = Object.keys(QDV.orgURLs);
 
+            // 1. Render in Homepage Studio (#envList)
+            const homeContainer = document.getElementById('envList');
+            const countBadge = document.getElementById('envCountBadge');
             if (countBadge) {
                 countBadge.textContent = `${keys.length} saved`;
             }
+            if (homeContainer) {
+                homeContainer.innerHTML = this.renderPillsHTML(keys);
+            }
 
-            if (activeStatusBox) {
+            // 2. Render in Global Modal (#modalEnvList)
+            const modalContainer = document.getElementById('modalEnvList');
+            const modalCount = document.getElementById('modalEnvCount');
+            if (modalCount) {
+                modalCount.textContent = `${keys.length} saved`;
+            }
+            if (modalContainer) {
+                modalContainer.innerHTML = this.renderPillsHTML(keys);
+            }
+
+            // 3. Render in Detail Page Strip (#detailEnvList)
+            const detailContainer = document.getElementById('detailEnvList');
+            if (detailContainer) {
+                detailContainer.innerHTML = this.renderDetailPillsHTML(keys);
+            }
+
+            // 4. Update Active Indicator Boxes (Home + Detail Page)
+            const activeBoxes = document.querySelectorAll('#envActiveIndicatorBox');
+            activeBoxes.forEach(box => {
                 if (QDV.activeOrg && QDV.orgURLs[QDV.activeOrg]) {
-                    activeStatusBox.className = 'env-active-indicator-box active';
-                    activeStatusBox.innerHTML = `<span class="status-dot"></span> Active: <strong>${QDV.activeOrg}</strong>`;
+                    box.className = 'env-active-indicator-box active';
+                    box.innerHTML = `<span class="status-dot"></span> Active: <strong>${QDV.activeOrg}</strong>`;
                 } else {
-                    activeStatusBox.className = 'env-active-indicator-box';
-                    activeStatusBox.innerHTML = `<span class="status-dot"></span> No active environment`;
+                    box.className = 'env-active-indicator-box';
+                    box.innerHTML = `<span class="status-dot"></span> No active environment`;
                 }
-            }
+            });
 
-            if (container) {
-                if (keys.length === 0) {
-                    container.innerHTML = `<span style="color: var(--text-subtle); font-size: 0.85rem; padding: 0.25rem 0;">No environments added yet. Add your Dataverse URL above (e.g. <code>https://org.crm.dynamics.com</code>).</span>`;
-                } else {
-                    let html = '';
-                    keys.forEach(key => {
-                        const url = QDV.orgURLs[key];
-                        const isSelected = key === QDV.activeOrg;
-                        html += `
-                            <div class="env-pill ${isSelected ? 'selected' : ''}" 
-                                 onclick="QDV.env.select('${key}')" 
-                                 title="${url}">
-                                <span class="env-pill-status"></span>
-                                <span class="env-pill-name">${key}</span>
-                                <span class="env-pill-action" onclick="QDV.env.copyUrl('${key}', event)" title="Copy URL">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                </span>
-                                <span class="env-pill-action" onclick="QDV.env.remove('${key}', event)" title="Remove environment">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                </span>
-                            </div>
-                        `;
-                    });
-                    container.innerHTML = html;
-                }
-            }
-
-            // Also render in navbar indicator
+            // 5. Update Navbar Indicator
             this.renderNavIndicator();
         },
 
@@ -318,12 +440,7 @@ const QDV = {
 
         if (!activeUrl) {
             QDV.toast.show('Please select or add a Dataverse environment first!', 'error');
-            const studio = document.querySelector('.env-studio-card');
-            if (studio) {
-                studio.scrollIntoView({ behavior: 'smooth' });
-                const input = document.getElementById('txtEnv');
-                if (input) input.focus();
-            }
+            this.env.openModal();
             return;
         }
 
@@ -342,7 +459,6 @@ const QDV = {
     },
 
     fetchQueryFile: async function (queryName, fileName) {
-        // Try local relative path first
         const relativeUrl = `${this.basePath}/Queries/${queryName}/${fileName}`;
         try {
             const resp = await fetch(relativeUrl);
@@ -353,7 +469,6 @@ const QDV = {
             // fallback below
         }
 
-        // Fallback to GitHub raw
         const rawUrl = `https://raw.githubusercontent.com/AshV/qdv/main/Queries/${queryName}/${fileName}`;
         const resp2 = await fetch(rawUrl);
         if (resp2.ok) {
@@ -378,6 +493,9 @@ const QDV = {
             this.queryName = queryName;
             this.tablePlural = tablePlural;
 
+            // Ensure custom syntax modes are ready
+            QDV.registerODataLanguage();
+
             this.setupTabs();
             this.loadAllFiles();
         },
@@ -394,7 +512,6 @@ const QDV = {
                     const targetPane = document.getElementById(targetId);
                     if (targetPane) targetPane.classList.add('active');
 
-                    // Update file name badge in toolbar
                     const fileName = btn.getAttribute('data-filename');
                     const fileBadge = document.getElementById('codeFileBadge');
                     if (fileBadge && fileName) {
@@ -403,7 +520,6 @@ const QDV = {
                 });
             });
 
-            // Action buttons
             const btnCopy = document.getElementById('btnCopyActiveCode');
             if (btnCopy) {
                 btnCopy.addEventListener('click', () => this.copyActiveCode());
@@ -501,7 +617,6 @@ const QDV = {
                     this.applyFilter();
                 });
 
-                // Global shortcut '/' to focus search
                 document.addEventListener('keydown', (e) => {
                     if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
                         e.preventDefault();
