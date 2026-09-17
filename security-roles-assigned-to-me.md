@@ -5,6 +5,5 @@ description: Retrieve all Dataverse security roles directly assigned to the curr
 category: Security & Roles
 tablePlural: systemusers 
 queryName: My-Security-Roles
-discussionId: 8
 tags: [security, roles, me, user, permissions]
 ---

@@ -5,6 +5,5 @@ description: Check if the currently authenticated user possesses the System Admi
 category: Security & Roles
 tablePlural: systemusers 
 queryName: Am-I-System-Administator
-discussionId: 3
 tags: [admin, security, permissions, user]
 ---

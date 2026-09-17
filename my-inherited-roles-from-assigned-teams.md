@@ -5,6 +5,5 @@ description: List all security roles inherited by the current user from their as
 category: Security & Roles
 tablePlural: systemusers 
 queryName: My-Inherited-Roles-From-Assigned-Teams
-discussionId: 7
 tags: [security, roles, inherited, teams, me]
 ---

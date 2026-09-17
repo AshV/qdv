@@ -5,6 +5,5 @@ description: Find all teams holding the System Administrator role together with 
 category: Teams & Groups
 tablePlural: teams 
 queryName: Teams-Having-System-Administrator-Role-Along-With-Users
-discussionId: 10
 tags: [teams, admin, members, users, roles]
 ---

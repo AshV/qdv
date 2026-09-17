@@ -5,6 +5,5 @@ description: Find all users who inherit the System Administrator role through as
 category: Security & Roles
 tablePlural: teams 
 queryName: List-Users-Inherited-System-Administrator-Role-From-Team
-discussionId: 6
 tags: [admin, inherited, teams, users, roles]
 ---

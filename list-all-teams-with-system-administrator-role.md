@@ -5,6 +5,5 @@ description: Retrieve all Dataverse teams that have been assigned the System Adm
 category: Teams & Groups
 tablePlural: teams 
 queryName: List-All-Teams-With-System-Administrator-Role
-discussionId: 5
 tags: [teams, admin, roles, security]
 ---
