@@ -538,11 +538,11 @@ const QDV = {
             if (target === 'paneFetchXML') {
                 toolbarBtn.style.display = 'inline-flex';
                 if (editFetchBtn) toolbarBtn.href = editFetchBtn.href;
-                if (toolbarText) toolbarText.textContent = 'Edit & Run in FetchXML Tester';
+                if (toolbarText) toolbarText.textContent = 'Edit in FetchXML Tester';
             } else if (target === 'paneWebAPI') {
                 toolbarBtn.style.display = 'inline-flex';
                 if (editODataBtn) toolbarBtn.href = editODataBtn.href;
-                if (toolbarText) toolbarText.textContent = 'Edit & Run in WebAPI Tester';
+                if (toolbarText) toolbarText.textContent = 'Edit in WebAPI Tester';
             } else {
                 toolbarBtn.style.display = 'none';
             }
