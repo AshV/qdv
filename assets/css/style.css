@@ -1036,8 +1036,8 @@ nav.custom-navbar {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-glass);
   box-shadow: var(--shadow-sm);
-  padding: 1.75rem 2rem;
-  margin-bottom: 1.25rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
 }
@@ -1057,7 +1057,7 @@ nav.custom-navbar {
   justify-content: space-between;
   align-items: flex-start;
   gap: 2rem;
-  margin-bottom: 0;
+  margin-bottom: 1rem;
 }
 
 .detail-title-group {
@@ -1514,24 +1514,31 @@ footer.custom-footer {
 }
 
 /* ==========================================================================
-   Environment Manager Strip (Sticky on Scroll)
+   Environment Manager Strip (Static in Query Page, Sticky on Homepage)
    ========================================================================== */
 
 .detail-env-manager-strip {
-  position: sticky;
-  top: var(--navbar-height, 63px);
-  z-index: 900;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glass);
+  margin-top: 1.25rem;
+  transition: all var(--transition-fast);
+}
+
+/* Sticky on scroll (Homepage only) */
+.detail-env-manager-strip.sticky-env-strip {
+  position: sticky;
+  top: var(--navbar-height, 63px);
+  z-index: 900;
   background: var(--bg-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-glass);
   box-shadow: var(--shadow-sm);
   margin-top: 0;
   margin-bottom: 1.5rem;

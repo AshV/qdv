@@ -15,7 +15,7 @@ subTitle: A curated collection of Microsoft Dataverse queries
 </section>
 
 <!-- Compact Environment Context Strip -->
-<div class="detail-env-manager-strip">
+<div class="detail-env-manager-strip sticky-env-strip">
     <div class="detail-env-status-side">
         <span class="detail-env-label">Environment:</span>
         <div id="envActiveIndicatorBox" class="env-active-indicator-box">
