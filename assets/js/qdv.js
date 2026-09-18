@@ -255,10 +255,24 @@ const QDV = {
                 };
             }
 
-            // Dynamic update of Edit & Run button when clicked
-            const editRunBtn = document.getElementById('btnEditAndRun');
-            if (editRunBtn) {
-                editRunBtn.addEventListener('click', () => {
+            // Dynamic update of Edit buttons when clicked
+            const editFetchBtn = document.getElementById('btnEditFetchXml') || document.getElementById('btnEditAndRun');
+            if (editFetchBtn) {
+                editFetchBtn.addEventListener('click', () => {
+                    this.updateEditRunButton();
+                });
+            }
+
+            const editODataBtn = document.getElementById('btnEditOData');
+            if (editODataBtn) {
+                editODataBtn.addEventListener('click', () => {
+                    this.updateEditRunButton();
+                });
+            }
+
+            const toolbarTesterBtn = document.getElementById('btnToolbarTester');
+            if (toolbarTesterBtn) {
+                toolbarTesterBtn.addEventListener('click', () => {
                     this.updateEditRunButton();
                 });
             }
@@ -472,22 +486,66 @@ const QDV = {
         },
 
         updateEditRunButton: function () {
-            const editRunBtn = document.getElementById('btnEditAndRun');
-            if (!editRunBtn) return;
-
-            const load = editRunBtn.getAttribute('data-load') || '';
-            const plural = editRunBtn.getAttribute('data-plural') || '';
-            const name = editRunBtn.getAttribute('data-name') || '';
             const activeUrl = this.getActiveUrl() || '';
 
-            // Construct query parameters in exact order: load, plural, env, name
-            const params = new URLSearchParams();
-            if (load) params.append('load', load);
-            if (plural) params.append('plural', plural);
-            params.append('env', activeUrl);
-            if (name) params.append('name', name);
+            // 1. FetchXML Tester Button
+            const editFetchBtn = document.getElementById('btnEditFetchXml') || document.getElementById('btnEditAndRun');
+            if (editFetchBtn) {
+                const load = editFetchBtn.getAttribute('data-load') || '';
+                const plural = editFetchBtn.getAttribute('data-plural') || '';
+                const name = editFetchBtn.getAttribute('data-name') || '';
 
-            editRunBtn.href = `https://www.ashishvishwakarma.com/FetchXmlTester/?${params.toString()}`;
+                const params = new URLSearchParams();
+                if (load) params.append('load', load);
+                if (plural) params.append('plural', plural);
+                params.append('env', activeUrl);
+                if (name) params.append('name', name);
+
+                editFetchBtn.href = `https://www.ashishvishwakarma.com/FetchXmlTester/?${params.toString()}`;
+            }
+
+            // 2. Web API (OData) Tester Button
+            const editODataBtn = document.getElementById('btnEditOData');
+            if (editODataBtn) {
+                const load = editODataBtn.getAttribute('data-load') || '';
+                const plural = editODataBtn.getAttribute('data-plural') || '';
+                const name = editODataBtn.getAttribute('data-name') || '';
+
+                const params = new URLSearchParams();
+                if (load) params.append('load', load);
+                if (plural) params.append('plural', plural);
+                params.append('env', activeUrl);
+                if (name) params.append('name', name);
+
+                editODataBtn.href = `https://www.ashishvishwakarma.com/webapi-tester/?${params.toString()}`;
+            }
+
+            // 3. Update Toolbar Tester Button
+            this.updateToolbarTesterButton();
+        },
+
+        updateToolbarTesterButton: function () {
+            const toolbarBtn = document.getElementById('btnToolbarTester');
+            const toolbarText = document.getElementById('btnToolbarTesterText');
+            if (!toolbarBtn) return;
+
+            const activeTab = document.querySelector('.code-tab-btn.active');
+            const target = activeTab ? activeTab.getAttribute('data-target') : 'paneFetchXML';
+
+            const editFetchBtn = document.getElementById('btnEditFetchXml') || document.getElementById('btnEditAndRun');
+            const editODataBtn = document.getElementById('btnEditOData');
+
+            if (target === 'paneFetchXML') {
+                toolbarBtn.style.display = 'inline-flex';
+                if (editFetchBtn) toolbarBtn.href = editFetchBtn.href;
+                if (toolbarText) toolbarText.textContent = 'Edit in FetchXML Tester';
+            } else if (target === 'paneWebAPI') {
+                toolbarBtn.style.display = 'inline-flex';
+                if (editODataBtn) toolbarBtn.href = editODataBtn.href;
+                if (toolbarText) toolbarText.textContent = 'Edit in WebAPI Tester';
+            } else {
+                toolbarBtn.style.display = 'none';
+            }
         },
 
         renderNavIndicator: function () {
@@ -604,8 +662,16 @@ const QDV = {
                     if (fileBadge && fileName) {
                         fileBadge.textContent = fileName;
                     }
+
+                    if (QDV.env && typeof QDV.env.updateToolbarTesterButton === 'function') {
+                        QDV.env.updateToolbarTesterButton();
+                    }
                 });
             });
+
+            if (QDV.env && typeof QDV.env.updateToolbarTesterButton === 'function') {
+                QDV.env.updateToolbarTesterButton();
+            }
 
             const btnCopy = document.getElementById('btnCopyActiveCode');
             if (btnCopy) {

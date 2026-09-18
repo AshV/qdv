@@ -33,7 +33,7 @@ layout: default
                     </svg>
                     <span>Run Query</span>
                 </button>
-                <a id="btnEditAndRun"
+                <a id="btnEditFetchXml"
                    href="https://www.ashishvishwakarma.com/FetchXmlTester/?load={{ site.baseurl }}/Queries/{{ page.queryName }}/fetch.xml&amp;plural={{ page.tablePlural }}&amp;env=&amp;name={{ page.title | url_encode }}"
                    data-load="{{ site.baseurl }}/Queries/{{ page.queryName }}/fetch.xml"
                    data-plural="{{ page.tablePlural }}"
@@ -43,10 +43,26 @@ layout: default
                    class="btn-secondary" 
                    title="Open and edit this FetchXML query in FetchXML Tester Online">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
                     </svg>
-                    <span>Edit &amp; Run</span>
+                    <span>Edit FetchXML</span>
+                </a>
+                <a id="btnEditOData"
+                   href="https://www.ashishvishwakarma.com/webapi-tester/?load={{ site.baseurl }}/Queries/{{ page.queryName }}/webapi.odata&amp;plural={{ page.tablePlural }}&amp;env=&amp;name={{ page.title | url_encode }}"
+                   data-load="{{ site.baseurl }}/Queries/{{ page.queryName }}/webapi.odata"
+                   data-plural="{{ page.tablePlural }}"
+                   data-name="{{ page.title }}"
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="btn-secondary" 
+                   title="Open and edit this OData query in WebAPI Tester Online">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span>Edit OData</span>
                 </a>
             </div>
         </div>
@@ -119,6 +135,14 @@ layout: default
                 </div>
 
                 <div class="code-toolbar-right">
+                    <a id="btnToolbarTester" class="btn-code-action" target="_blank" rel="noopener noreferrer" title="Open in online editor studio">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        <span id="btnToolbarTesterText">Edit in FetchXML Tester</span>
+                    </a>
                     <button id="btnCopyActiveCode" class="btn-code-action" title="Copy code snippet">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -161,8 +185,8 @@ layout: default
                         <polygon points="10 8 16 12 10 16 10 8"></polygon>
                     </svg>
                 </div>
-                <h4>1. Browser Web API &amp; Online Tester</h4>
-                <p>Click <strong>Run Query</strong> to execute directly in your browser session, or click <strong>Edit &amp; Run</strong> to customize, format, and test the FetchXML in FetchXML Tester Online.</p>
+                <h4>1. Browser Web API &amp; Online Studios</h4>
+                <p>Click <strong>Run Query</strong> for direct browser execution, or use <strong>Edit FetchXML</strong> (<a href="https://www.ashishvishwakarma.com/FetchXmlTester/" target="_blank" rel="noopener noreferrer">FetchXML Tester</a>) and <strong>Edit OData</strong> (<a href="https://www.ashishvishwakarma.com/webapi-tester/" target="_blank" rel="noopener noreferrer">WebAPI Tester</a>) to edit, beautify, and test queries in online studios.</p>
             </div>
 
             <div class="guide-card">
