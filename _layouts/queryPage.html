@@ -66,31 +66,31 @@ layout: default
                 </a>
             </div>
         </div>
+    </header>
 
-        <!-- Detail Page Interactive Environment Manager Bar -->
-        <div class="detail-env-manager-strip">
-            <div class="detail-env-status-side">
-                <span class="detail-env-label">Environment:</span>
-                <div id="envActiveIndicatorBox" class="env-active-indicator-box">
-                    <span class="status-dot"></span>
-                    <span>No active environment</span>
-                </div>
-            </div>
-
-            <div class="detail-env-pills-side">
-                <div id="detailEnvList" class="detail-env-pills-row">
-                    <!-- Environment pills injected by qdv.js -->
-                </div>
-                <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Add / Manage</span>
-                </button>
+    <!-- Detail Page Interactive Environment Manager Bar -->
+    <div class="detail-env-manager-strip">
+        <div class="detail-env-status-side">
+            <span class="detail-env-label">Environment:</span>
+            <div id="envActiveIndicatorBox" class="env-active-indicator-box">
+                <span class="status-dot"></span>
+                <span>No active environment</span>
             </div>
         </div>
-    </header>
+
+        <div class="detail-env-pills-side">
+            <div id="detailEnvList" class="detail-env-pills-row">
+                <!-- Environment pills injected by qdv.js -->
+            </div>
+            <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add / Manage</span>
+            </button>
+        </div>
+    </div>
 
     <!-- Code Viewer Card -->
     <div class="code-viewer-card">

@@ -12,11 +12,21 @@ const QDV = {
 
     init: function () {
         this.detectBasePath();
+        this.updateNavHeight();
+        window.addEventListener('resize', () => this.updateNavHeight());
         this.registerODataLanguage();
         this.theme.init();
         this.env.init();
         this.search.init();
         this.toast.init();
+    },
+
+    updateNavHeight: function () {
+        const nav = document.querySelector('nav.custom-navbar');
+        if (nav) {
+            const h = nav.getBoundingClientRect().height;
+            document.documentElement.style.setProperty('--navbar-height', `${Math.round(h)}px`);
+        }
     },
 
     detectBasePath: function () {
