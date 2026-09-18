@@ -3,7 +3,7 @@ layout: queryPage
 title: Am I System Administrator?
 description: Check if the currently authenticated user possesses the System Administrator security role directly.
 category: Security & Roles
-tablePlural: systemusers 
+tablePlural: systemusers
 queryName: Am-I-System-Administator
 tags: [admin, security, permissions, user]
 ---

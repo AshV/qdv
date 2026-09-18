@@ -255,6 +255,14 @@ const QDV = {
                 };
             }
 
+            // Dynamic update of Edit & Run button when clicked
+            const editRunBtn = document.getElementById('btnEditAndRun');
+            if (editRunBtn) {
+                editRunBtn.addEventListener('click', () => {
+                    this.updateEditRunButton();
+                });
+            }
+
             // Keyboard Escape closes modal
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
@@ -458,6 +466,28 @@ const QDV = {
 
             // 5. Update Navbar Indicator
             this.renderNavIndicator();
+
+            // 6. Update Edit & Run button href with active environment URL
+            this.updateEditRunButton();
+        },
+
+        updateEditRunButton: function () {
+            const editRunBtn = document.getElementById('btnEditAndRun');
+            if (!editRunBtn) return;
+
+            const load = editRunBtn.getAttribute('data-load') || '';
+            const plural = editRunBtn.getAttribute('data-plural') || '';
+            const name = editRunBtn.getAttribute('data-name') || '';
+            const activeUrl = this.getActiveUrl() || '';
+
+            // Construct query parameters in exact order: load, plural, env, name
+            const params = new URLSearchParams();
+            if (load) params.append('load', load);
+            if (plural) params.append('plural', plural);
+            params.append('env', activeUrl);
+            if (name) params.append('name', name);
+
+            editRunBtn.href = `https://www.ashishvishwakarma.com/FetchXmlTester/?${params.toString()}`;
         },
 
         renderNavIndicator: function () {

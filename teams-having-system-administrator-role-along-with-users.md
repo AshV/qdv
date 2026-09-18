@@ -3,7 +3,7 @@ layout: queryPage
 title: Admin Teams Along with Member Users
 description: Find all teams holding the System Administrator role together with their member users.
 category: Teams & Groups
-tablePlural: teams 
+tablePlural: teams
 queryName: Teams-Having-System-Administrator-Role-Along-With-Users
 tags: [teams, admin, members, users, roles]
 ---
