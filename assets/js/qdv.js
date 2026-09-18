@@ -765,9 +765,33 @@ const QDV = {
             const categoryPills = document.querySelectorAll('.category-pill');
 
             if (searchInput) {
+                // Prepopulate search from query string if available (e.g. ?q=keyword)
+                const urlParams = new URLSearchParams(window.location.search);
+                const qParam = urlParams.get('q') || urlParams.get('search');
+                if (qParam) {
+                    searchInput.value = qParam;
+                    this.searchTerm = qParam.toLowerCase().trim();
+                    this.applyFilter();
+                }
+
                 searchInput.addEventListener('input', (e) => {
                     this.searchTerm = e.target.value.toLowerCase().trim();
-                    this.applyFilter();
+                    const cards = document.querySelectorAll('.query-card');
+                    if (cards.length > 0) {
+                        this.applyFilter();
+                    }
+                });
+
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const cards = document.querySelectorAll('.query-card');
+                        if (cards.length === 0 && searchInput.value.trim()) {
+                            // On query detail page: navigate to homepage with search query
+                            const baseUrlMeta = document.querySelector('meta[name="site-baseurl"]');
+                            const baseUrl = baseUrlMeta ? baseUrlMeta.getAttribute('content') : '';
+                            window.location.href = `${baseUrl}/?q=${encodeURIComponent(searchInput.value.trim())}`;
+                        }
+                    }
                 });
 
                 document.addEventListener('keydown', (e) => {

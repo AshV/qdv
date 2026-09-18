@@ -214,47 +214,66 @@ nav.custom-navbar {
   text-transform: uppercase;
 }
 
-/* Header Environment Indicator */
-.nav-env-indicator {
+/* Header Searchbox */
+.nav-search-box {
+  position: relative;
+  flex: 1;
+  max-width: 480px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
+  margin: 0 1.25rem;
+}
+
+.nav-search-box svg {
+  position: absolute;
+  left: 0.95rem;
+  width: 17px;
+  height: 17px;
+  color: var(--text-subtle);
+  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+.nav-search-box input {
+  width: 100%;
+  padding: 0.52rem 2.4rem 0.52rem 2.4rem;
   background: var(--bg-subtle);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-full);
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  cursor: pointer;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  outline: none;
   transition: all var(--transition-fast);
-  max-width: 280px;
 }
 
-.nav-env-indicator:hover {
-  background: var(--primary-light);
+.nav-search-box input::placeholder {
+  color: var(--text-subtle);
+}
+
+.nav-search-box input:focus {
+  background: var(--bg-surface);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15), var(--shadow-sm);
+}
+
+.nav-search-box input:focus + .search-shortcut-hint,
+.nav-search-box:focus-within svg {
   color: var(--primary);
-  border-color: rgba(var(--primary-rgb), 0.3);
 }
 
-.nav-env-indicator .status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--text-subtle);
-  flex-shrink: 0;
-  transition: background var(--transition-fast);
-}
-
-.nav-env-indicator.active .status-dot {
-  background: var(--accent-emerald);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-
-.nav-env-indicator .env-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.nav-search-box .search-shortcut-hint {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.12rem 0.45rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  pointer-events: none;
+  line-height: 1.2;
 }
 
 /* Nav Actions */
@@ -1591,11 +1610,16 @@ code.language-odata {
 
 @media (max-width: 768px) {
   .nav-inner {
-    padding: 0.75rem 0;
+    padding: 0.65rem 0;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
-  
-  .nav-env-indicator {
-    display: none; /* Hide compact header env on mobile */
+
+  .nav-search-box {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.25rem 0 0;
   }
 
   .hero-section {

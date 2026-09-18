@@ -38,18 +38,8 @@ subTitle: A curated collection of Microsoft Dataverse queries
     </div>
 </div>
 
-<!-- Filter & Search Studio -->
+<!-- Filter & Category Studio -->
 <div class="filter-studio">
-    <div class="search-bar-row">
-        <div class="search-input-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input id="txtSearch" type="search" placeholder="Search queries by title, entity, or keyword..." autocomplete="off" />
-            <span class="search-shortcut-hint">/</span>
-        </div>
-    </div>
 
     <div class="category-chips-row">
         <div class="category-pills">
