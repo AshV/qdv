@@ -27,12 +27,6 @@ layout: default
             </div>
 
             <div class="detail-header-actions">
-                <button class="btn-primary" onclick="QDV.runQuery('{{ page.queryName }}', '{{ page.tablePlural }}')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                    <span>Run Query</span>
-                </button>
                 <a id="btnEditFetchXml"
                    href="https://www.ashishvishwakarma.com/FetchXmlTester/?load={{ site.baseurl }}/Queries/{{ page.queryName }}/fetch.xml&amp;plural={{ page.tablePlural }}&amp;env=&amp;name={{ page.title | url_encode }}"
                    data-load="{{ site.baseurl }}/Queries/{{ page.queryName }}/fetch.xml"
@@ -41,12 +35,12 @@ layout: default
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="btn-secondary" 
-                   title="Open and edit this FetchXML query in FetchXML Tester Online">
+                   title="Open, edit, and test this FetchXML query in FetchXML Tester Online">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="16 18 22 12 16 6"></polyline>
                         <polyline points="8 6 2 12 8 18"></polyline>
                     </svg>
-                    <span>Edit FetchXML</span>
+                    <span>Edit &amp; Run FetchXML</span>
                 </a>
                 <a id="btnEditOData"
                    href="https://www.ashishvishwakarma.com/webapi-tester/?load={{ site.baseurl }}/Queries/{{ page.queryName }}/webapi.odata&amp;plural={{ page.tablePlural }}&amp;env=&amp;name={{ page.title | url_encode }}"
@@ -56,37 +50,48 @@ layout: default
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="btn-secondary" 
-                   title="Open and edit this OData query in WebAPI Tester Online">
+                   title="Open, edit, and test this OData query in WebAPI Tester Online">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="2" y1="12" x2="22" y2="12"></line>
                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                     </svg>
-                    <span>Edit OData</span>
+                    <span>Edit &amp; Run OData</span>
                 </a>
             </div>
         </div>
 
         <!-- Detail Page Interactive Environment Manager Bar -->
         <div class="detail-env-manager-strip">
-            <div class="detail-env-status-side">
-                <span class="detail-env-label">Environment:</span>
-                <div id="envActiveIndicatorBox" class="env-active-indicator-box">
-                    <span class="status-dot"></span>
-                    <span>No active environment</span>
+            <div class="detail-env-left-group">
+                <div class="detail-env-status-side">
+                    <span class="detail-env-label">Environment:</span>
+                    <div id="envActiveIndicatorBox" class="env-active-indicator-box">
+                        <span class="status-dot"></span>
+                        <span>No active environment</span>
+                    </div>
+                </div>
+
+                <div class="detail-env-pills-side">
+                    <div id="detailEnvList" class="detail-env-pills-row">
+                        <!-- Environment pills injected by qdv.js -->
+                    </div>
+                    <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Add / Manage</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="detail-env-pills-side">
-                <div id="detailEnvList" class="detail-env-pills-row">
-                    <!-- Environment pills injected by qdv.js -->
-                </div>
-                <button class="btn-secondary detail-btn-manage-env" onclick="QDV.env.openModal()" title="Add or manage environments">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
+            <div class="detail-env-action-side">
+                <button id="btnRunQuery" class="btn-primary btn-run-query-lg" onclick="QDV.runQuery('{{ page.queryName }}', '{{ page.tablePlural }}')" title="Execute query directly against active environment">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
-                    <span>Add / Manage</span>
+                    <span>Run Query</span>
                 </button>
             </div>
         </div>
@@ -141,7 +146,7 @@ layout: default
                             <polyline points="15 3 21 3 21 9"></polyline>
                             <line x1="10" y1="14" x2="21" y2="3"></line>
                         </svg>
-                        <span id="btnToolbarTesterText">Edit in FetchXML Tester</span>
+                        <span id="btnToolbarTesterText">Edit &amp; Run in FetchXML Tester</span>
                     </a>
                     <button id="btnCopyActiveCode" class="btn-code-action" title="Copy code snippet">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -186,7 +191,7 @@ layout: default
                     </svg>
                 </div>
                 <h4>1. Browser Web API &amp; Online Studios</h4>
-                <p>Click <strong>Run Query</strong> for direct browser execution, or use <strong>Edit FetchXML</strong> (<a href="https://www.ashishvishwakarma.com/FetchXmlTester/" target="_blank" rel="noopener noreferrer">FetchXML Tester</a>) and <strong>Edit OData</strong> (<a href="https://www.ashishvishwakarma.com/webapi-tester/" target="_blank" rel="noopener noreferrer">WebAPI Tester</a>) to edit, beautify, and test queries in online studios.</p>
+                <p>Click <strong>Run Query</strong> for direct browser execution, or use <strong>Edit &amp; Run FetchXML</strong> (<a href="https://www.ashishvishwakarma.com/FetchXmlTester/" target="_blank" rel="noopener noreferrer">FetchXML Tester</a>) and <strong>Edit &amp; Run OData</strong> (<a href="https://www.ashishvishwakarma.com/webapi-tester/" target="_blank" rel="noopener noreferrer">WebAPI Tester</a>) to edit, beautify, and test queries in online studios.</p>
             </div>
 
             <div class="guide-card">
