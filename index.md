@@ -64,7 +64,7 @@ subTitle: A curated collection of Microsoft Dataverse queries
 </div>
 
 <!-- Query Cards Grid -->
-<div class="query-grid">
+<div id="homeQueryGrid" class="query-grid">
     {% for query in site.pages %}
         {% if query.layout == 'queryPage' %}
         <div class="query-card" 

@@ -1,0 +1,17 @@
+---
+layout: null
+permalink: /queries.json
+---
+[
+{% assign qpages = site.pages | where: "layout", "queryPage" %}
+{% for q in qpages %}
+  {
+    "title": {{ q.title | jsonify }},
+    "description": {{ q.description | default: "" | jsonify }},
+    "category": {{ q.category | default: "General" | jsonify }},
+    "tablePlural": {{ q.tablePlural | jsonify }},
+    "queryName": {{ q.queryName | jsonify }},
+    "url": {{ q.url | relative_url | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]

@@ -241,7 +241,7 @@ layout: default
                         {% if shown_count < 3 %}
                             {% assign shown_urls = shown_urls | push: other.url %}
                             {% assign shown_count = shown_count | plus: 1 %}
-                            <div class="query-card"
+                            <div class="query-card suggested-card"
                                  data-title="{{ other.title | escape }}"
                                  data-desc="{{ other.description | default: '' | escape }}"
                                  data-category="{{ other.category | default: 'General' }}"
@@ -286,7 +286,7 @@ layout: default
                             {% if shown_count < 3 %}
                                 {% assign shown_urls = shown_urls | push: other.url %}
                                 {% assign shown_count = shown_count | plus: 1 %}
-                                <div class="query-card"
+                                <div class="query-card suggested-card"
                                      data-title="{{ other.title | escape }}"
                                      data-desc="{{ other.description | default: '' | escape }}"
                                      data-category="{{ other.category | default: 'General' }}"

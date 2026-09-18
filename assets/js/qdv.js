@@ -769,10 +769,16 @@ const QDV = {
     search: {
         activeCategory: 'all',
         searchTerm: '',
+        catalog: [],
+        selectedIndex: -1,
 
         init: function () {
+            this.loadCatalog();
             const searchInput = document.getElementById('txtSearch');
+            const searchDropdown = document.getElementById('searchDropdown');
+            const resultsList = document.getElementById('searchResultsList');
             const categoryPills = document.querySelectorAll('.category-pill');
+            const isHomepage = !!document.getElementById('homeQueryGrid');
 
             if (searchInput) {
                 // Prepopulate search from query string if available (e.g. ?q=keyword)
@@ -781,38 +787,84 @@ const QDV = {
                 if (qParam) {
                     searchInput.value = qParam;
                     this.searchTerm = qParam.toLowerCase().trim();
-                    this.applyFilter();
+                    if (isHomepage) {
+                        this.applyFilter();
+                    }
                 }
 
                 searchInput.addEventListener('input', (e) => {
                     this.searchTerm = e.target.value.toLowerCase().trim();
-                    const cards = document.querySelectorAll('.query-card');
-                    if (cards.length > 0) {
+                    if (isHomepage) {
                         this.applyFilter();
+                    } else {
+                        this.renderDropdown();
+                    }
+                });
+
+                searchInput.addEventListener('focus', () => {
+                    if (!isHomepage && this.searchTerm) {
+                        this.renderDropdown();
                     }
                 });
 
                 searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const cards = document.querySelectorAll('.query-card');
-                        if (cards.length === 0 && searchInput.value.trim()) {
-                            // On query detail page: navigate to homepage with search query
-                            const baseUrlMeta = document.querySelector('meta[name="site-baseurl"]');
-                            const baseUrl = baseUrlMeta ? baseUrlMeta.getAttribute('content') : '';
-                            window.location.href = `${baseUrl}/?q=${encodeURIComponent(searchInput.value.trim())}`;
+                    if (!isHomepage && searchDropdown && searchDropdown.style.display !== 'none') {
+                        const items = resultsList ? resultsList.querySelectorAll('.search-dropdown-item') : [];
+                        if (e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            if (items.length > 0) {
+                                this.selectedIndex = (this.selectedIndex + 1) % items.length;
+                                this.updateDropdownFocus(items);
+                            }
+                            return;
+                        } else if (e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            if (items.length > 0) {
+                                this.selectedIndex = (this.selectedIndex - 1 + items.length) % items.length;
+                                this.updateDropdownFocus(items);
+                            }
+                            return;
+                        } else if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+                                window.location.href = items[this.selectedIndex].getAttribute('href');
+                                return;
+                            } else if (searchInput.value.trim()) {
+                                const baseUrlMeta = document.querySelector('meta[name="site-baseurl"]');
+                                const baseUrl = baseUrlMeta ? baseUrlMeta.getAttribute('content') : '';
+                                window.location.href = `${baseUrl}/?q=${encodeURIComponent(searchInput.value.trim())}`;
+                                return;
+                            }
                         }
+                    }
+
+                    if (e.key === 'Enter' && !isHomepage && searchInput.value.trim()) {
+                        const baseUrlMeta = document.querySelector('meta[name="site-baseurl"]');
+                        const baseUrl = baseUrlMeta ? baseUrlMeta.getAttribute('content') : '';
+                        window.location.href = `${baseUrl}/?q=${encodeURIComponent(searchInput.value.trim())}`;
                     }
                 });
 
+                // Global shortcut '/' to focus search, and 'Escape' to dismiss
                 document.addEventListener('keydown', (e) => {
                     if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
                         e.preventDefault();
                         searchInput.focus();
-                    } else if (e.key === 'Escape' && document.activeElement === searchInput) {
-                        searchInput.value = '';
-                        this.searchTerm = '';
-                        this.applyFilter();
-                        searchInput.blur();
+                    } else if (e.key === 'Escape') {
+                        if (searchDropdown) searchDropdown.style.display = 'none';
+                        if (document.activeElement === searchInput) {
+                            searchInput.value = '';
+                            this.searchTerm = '';
+                            if (isHomepage) this.applyFilter();
+                            searchInput.blur();
+                        }
+                    }
+                });
+
+                // Click outside closes dropdown
+                document.addEventListener('click', (e) => {
+                    if (searchDropdown && !searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                        searchDropdown.style.display = 'none';
                     }
                 });
             }
@@ -829,8 +881,102 @@ const QDV = {
             }
         },
 
-        applyFilter: function () {
+        loadCatalog: function () {
+            const el = document.getElementById('qdvCatalogData');
+            if (el) {
+                try {
+                    this.catalog = JSON.parse(el.textContent);
+                    return;
+                } catch (err) {
+                    console.warn('Could not parse qdvCatalogData', err);
+                }
+            }
+            // Fallback: scrape any cards on page if catalog script wasn't present
+            this.catalog = [];
             const cards = document.querySelectorAll('.query-card');
+            cards.forEach(card => {
+                const titleLink = card.querySelector('.query-card-title a');
+                this.catalog.push({
+                    title: card.getAttribute('data-title') || (titleLink ? titleLink.textContent : ''),
+                    description: card.getAttribute('data-desc') || '',
+                    category: card.getAttribute('data-category') || 'General',
+                    tablePlural: card.getAttribute('data-entity') || '',
+                    url: titleLink ? titleLink.getAttribute('href') : ''
+                });
+            });
+        },
+
+        renderDropdown: function () {
+            const dropdown = document.getElementById('searchDropdown');
+            const list = document.getElementById('searchResultsList');
+            if (!dropdown || !list) return;
+
+            if (!this.searchTerm) {
+                dropdown.style.display = 'none';
+                this.selectedIndex = -1;
+                return;
+            }
+
+            const query = this.searchTerm;
+            const matches = this.catalog.filter(item => {
+                const title = (item.title || '').toLowerCase();
+                const desc = (item.description || '').toLowerCase();
+                const entity = (item.tablePlural || '').toLowerCase();
+                const cat = (item.category || '').toLowerCase();
+                return title.includes(query) || desc.includes(query) || entity.includes(query) || cat.includes(query);
+            });
+
+            this.selectedIndex = -1;
+
+            if (matches.length === 0) {
+                list.innerHTML = `
+                    <div class="search-dropdown-empty">
+                        <div class="search-dropdown-empty-icon">🔍</div>
+                        <div>No queries found matching "<strong>${this.escapeHtml(query)}</strong>"</div>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = matches.slice(0, 7).map((item, idx) => `
+                    <a href="${item.url}" class="search-dropdown-item" data-index="${idx}">
+                        <span class="entity-badge ${item.tablePlural}">${item.tablePlural || 'data'}</span>
+                        <div class="search-item-body">
+                            <div class="search-item-title">${this.highlightMatch(item.title, query)}</div>
+                            <div class="search-item-desc">${this.escapeHtml(item.description || '')}</div>
+                        </div>
+                        <span class="search-item-category">${this.escapeHtml(item.category || 'Query')}</span>
+                    </a>
+                `).join('');
+            }
+
+            dropdown.style.display = 'flex';
+        },
+
+        updateDropdownFocus: function (items) {
+            items.forEach((it, i) => {
+                if (i === this.selectedIndex) {
+                    it.classList.add('focused');
+                    it.scrollIntoView({ block: 'nearest' });
+                } else {
+                    it.classList.remove('focused');
+                }
+            });
+        },
+
+        escapeHtml: function (str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        },
+
+        highlightMatch: function (text, query) {
+            if (!query) return this.escapeHtml(text);
+            const escapedText = this.escapeHtml(text);
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return escapedText.replace(regex, '<mark>$1</mark>');
+        },
+
+        applyFilter: function () {
+            const grid = document.getElementById('homeQueryGrid');
+            if (!grid) return;
+            const cards = grid.querySelectorAll('.query-card');
             const emptyState = document.getElementById('emptyState');
             const countDisplay = document.getElementById('filteredCount');
 

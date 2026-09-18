@@ -48,6 +48,16 @@
                 </svg>
                 <input id="txtSearch" type="search" placeholder="Search queries by title, entity, or keyword..." autocomplete="off" />
                 <span class="search-shortcut-hint">/</span>
+
+                <!-- Search Results Autocomplete Dropdown -->
+                <div id="searchDropdown" class="search-dropdown" style="display: none;">
+                    <div id="searchResultsList" class="search-results-list"></div>
+                    <div class="search-dropdown-footer">
+                        <span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span>
+                        <span><kbd>↵</kbd> select</span>
+                        <span><kbd>ESC</kbd> close</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Navbar Actions -->
@@ -145,6 +155,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Query Catalog Data for Global Search Autocomplete -->
+    <script id="qdvCatalogData" type="application/json">
+        [
+        {% assign qpages = site.pages | where: "layout", "queryPage" %}
+        {% for q in qpages %}
+            {
+                "title": {{ q.title | jsonify }},
+                "description": {{ q.description | default: "" | jsonify }},
+                "category": {{ q.category | default: "General" | jsonify }},
+                "tablePlural": {{ q.tablePlural | jsonify }},
+                "queryName": {{ q.queryName | jsonify }},
+                "url": {{ q.url | relative_url | jsonify }}
+            }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+        ]
+    </script>
 
     <!-- Highlight.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
